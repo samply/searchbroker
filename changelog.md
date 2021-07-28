@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.2.1 - 2021-07-28]
+### Fixed
+- Icinga api call
+
 ## [8.2.0 - 2021-06-04]
 ### Changed
 - Api call to get all sites and their directory id
