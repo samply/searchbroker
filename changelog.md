@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.2.2 - 2021-07-29]
+### Changed
+- share-common version 4.2.0
+
 ## [8.2.1 - 2021-07-28]
 ### Fixed
 - Icinga api call
