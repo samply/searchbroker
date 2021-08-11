@@ -179,6 +179,7 @@ public class Searchbroker {
       return createPreflightCorsResponse(HttpMethod.POST,
           "origin, Accept, Content-type, Authorization");
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -190,7 +191,7 @@ public class Searchbroker {
    * @return list of biobank name and their directory ids
    */
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getAllDirectoryids")
+  @Path("/allDirectoryIds")
   @GET
   @APIResponses({
       @APIResponse(
@@ -204,10 +205,11 @@ public class Searchbroker {
       @APIResponse(responseCode = "500", description = "Internal Server Error")
   })
   @Operation(summary = "Retrieve biobank- and collection-IDs for list of biobanks")
-  public Response getAllDirectoryIds() {
+  public Response getDirectoryId() {
     try {
       return addCorsHeaders(Response.ok(SiteController.getAllSites()));
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
