@@ -156,6 +156,7 @@ public class Searchbroker {
       }
       return addCorsHeaders(Response.ok(biobank));
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -220,7 +221,7 @@ public class Searchbroker {
    * @return OPTIONS response.
    */
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getAllDirectoryids")
+  @Path("/allDirectoryIds")
   @OPTIONS
   @APIResponses({
       @APIResponse(responseCode = "204", description = "no-content")
@@ -232,6 +233,7 @@ public class Searchbroker {
       return createPreflightCorsResponse(HttpMethod.GET,
           "origin, Accept, Content-type");
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
