@@ -54,11 +54,13 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.jooq.tools.json.JSONArray;
 import org.jooq.tools.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,12 +115,84 @@ public class Searchbroker {
   }
 
   /**
+   * Return the directory id of the desired biobanks.
+   *
+   * @param biobankNameList name of the biobanks
+   * @return list of biobank name and their directory ids
+   */
+  @Secured
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
+  @Path("/getDirectoryID")
+  @POST
+  @APIResponses({
+      @APIResponse(
+          responseCode = "200",
+          description = "ok",
+          content = @Content(
+              mediaType = MediaType.APPLICATION_JSON,
+              schema = @Schema(implementation = JSONObject[].class)
+          )),
+      @APIResponse(responseCode = "401", description = "Unauthorized access"),
+      @APIResponse(responseCode = "500", description = "Internal Server Error")
+  })
+  @Operation(summary = "Retrieve biobank- and collection-IDs for list of biobanks")
+  public Response getDirectoryID(
+      @Parameter(
+          name = "biobankNameList",
+          description = "The list of biobanks (by name) to get IDs (biobank-ID and collection-ID) "
+              + "for",
+          example = "['Lübeck', 'Heidelberg']",
+          schema = @Schema(type = SchemaType.ARRAY, implementation = String.class))
+          List<String> biobankNameList) {
+    try {
+      JSONArray biobank = new JSONArray();
+      for (String biobankName : biobankNameList) {
+        JSONObject jsonObject = new JSONObject();
+        Site site = SiteUtil.fetchSiteByNameIgnoreCase(biobankName);
+        jsonObject.put("biobankId", site.getBiobankid());
+        jsonObject.put("collectionId", site.getCollectionid());
+        biobank.add(jsonObject);
+      }
+      return addCorsHeaders(Response.ok(biobank));
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage());
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  /**
+   * Get OPTIONS-Call for the path "getDirectoryID".
+   *
+   * @return OPTIONS response.
+   */
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
+  @Path("/getDirectoryID")
+  @OPTIONS
+  @APIResponses({
+      @APIResponse(responseCode = "204", description = "no-content")
+  })
+  @Operation(summary = "The list of biobanks (by name) to get IDs (biobank-ID and collection-ID) "
+      + "for (OPTIONS for CORS)")
+  public Response getDirectoryIdOptions() {
+    try {
+      return createPreflightCorsResponse(HttpMethod.POST,
+          "origin, Accept, Content-type, Authorization");
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage());
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+
+  /**
    * Return the directory id of the biobanks.
    *
    * @return list of biobank name and their directory ids
    */
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getDirectoryid")
+  @Path("/allDirectoryIds")
   @GET
   @APIResponses({
       @APIResponse(
@@ -136,6 +210,7 @@ public class Searchbroker {
     try {
       return addCorsHeaders(Response.ok(SiteController.getAllSites()));
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -146,18 +221,19 @@ public class Searchbroker {
    * @return OPTIONS response.
    */
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getDirectoryid")
+  @Path("/allDirectoryIds")
   @OPTIONS
   @APIResponses({
       @APIResponse(responseCode = "204", description = "no-content")
   })
   @Operation(summary = "Retrieve biobank- and collection-IDs for list of biobanks) "
       + "for (OPTIONS for CORS)")
-  public Response getDirectoryIdOptions() {
+  public Response getAllDirectoryIdOptions() {
     try {
       return createPreflightCorsResponse(HttpMethod.GET,
-          "origin, Accept, Content-type, Authorization");
+          "origin, Accept, Content-type");
     } catch (Exception e) {
+      LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
