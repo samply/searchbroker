@@ -249,7 +249,7 @@ public class Searchbroker {
    *        <CODE>500</CODE> on any other error
    */
   @Secured
-  @Path("/selectedBiobank")
+  @Path("/saveSelectedBiobank")
   @POST
   @APIResponses({
           @APIResponse(
@@ -258,6 +258,7 @@ public class Searchbroker {
           @APIResponse(responseCode = "400", description = "Query by n-Token not found"),
           @APIResponse(responseCode = "500", description = "Internal Server Error")
   })
+  @Consumes({MediaType.APPLICATION_JSON})
   @Operation(summary = "Save the selected biobanks for the negotiator")
   public Response saveSelectedBiobank(@QueryParam("ntoken") String ntoken,
                                       @QueryParam("selectedBiobanks") String selectedBiobanks) {
@@ -274,6 +275,23 @@ public class Searchbroker {
   }
 
   /**
+   * Get OPTIONS-Call for the path "saveSelectedBiobank".
+   *
+   * @return OPTIONS response.
+   */
+  @OPTIONS
+  @Path("/saveSelectedBiobank")
+  @Consumes({MediaType.APPLICATION_JSON})
+  @APIResponses({
+      @APIResponse(responseCode = "204", description = "no-content")
+  })
+  @Operation(summary = "Save the selected biobanks for the negotiator (OPTIONS for CORS)")
+  public Response saveSelectedBiobankOptions() {
+    return createPreflightCorsResponse(HttpMethod.POST,
+        "origin, accept, authorization");
+  }
+
+  /**
    * Save the selected biobanks for the negotiator.
    * @return <CODE>200</CODE> the selected biobanks are saved
    *        <CODE>400</CODE> if the inquiry id can't be parsed
@@ -282,8 +300,10 @@ public class Searchbroker {
    *        <CODE>500</CODE> on any other error
    */
   @Secured
-  @Path("/selectedBiobank")
+  @Path("/readSelectedBiobank")
   @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes({MediaType.APPLICATION_JSON})
   @APIResponses({
           @APIResponse(
                   responseCode = "200",
@@ -291,7 +311,7 @@ public class Searchbroker {
           @APIResponse(responseCode = "400", description = "Query by n-Token not found"),
           @APIResponse(responseCode = "500", description = "Internal Server Error")
   })
-  @Operation(summary = "Save the selected biobanks for the negotiator")
+  @Operation(summary = "Read the selected biobanks for the negotiator")
   public Response getSelectedBiobank(@QueryParam("ntoken") String ntoken) {
     try {
       return Response.ok(new NTokenHandler().getSelectedBiobank(ntoken)).build();
@@ -302,6 +322,24 @@ public class Searchbroker {
       LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
+  }
+
+
+  /**
+   * Get OPTIONS-Call for the path "readSelectedBiobank".
+   *
+   * @return OPTIONS response.
+   */
+  @OPTIONS
+  @Path("/readSelectedBiobank")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes({MediaType.APPLICATION_JSON})
+  @APIResponses({
+      @APIResponse(responseCode = "204", description = "no-content")
+  })
+  @Operation(summary = "Read the selected biobanks for the negotiator (OPTIONS for CORS)")
+  public Response getSelectedBiobankOptions() {
+    return createPreflightCorsResponse(HttpMethod.GET, "origin, accept, authorization");
   }
 
   /**
