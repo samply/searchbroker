@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.4.0 - 2021-08-25]
+### Added
+- Change icinga project value by docker environment
+
 ## [8.3.0 - 2021-08-13]
 ### Added
 - Save selected biobanks for the negotiator
