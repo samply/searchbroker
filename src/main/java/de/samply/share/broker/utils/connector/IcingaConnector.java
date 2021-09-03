@@ -60,9 +60,9 @@ public class IcingaConnector {
   private static Gson gson;
   private static String targetPath;
   private static String siteSuffix;
+  private static String project;
   private static CredentialsProvider credentialsProvider;
   private static HttpClientContext context;
-  private static String project;
 
   static {
     try {
@@ -146,7 +146,7 @@ public class IcingaConnector {
         httpPost = createPostHost(sitename);
       } else {
         httpPost = createPost(sitename, statusReportItem.getParameterName()
-              + project);
+            + "-" + project);
       }
       IcingaReportItem icingaReportItem = new IcingaReportItem();
       icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
@@ -194,7 +194,7 @@ public class IcingaConnector {
     try {
       HttpPost httpPost;
       httpPost = createPost(sitename, statusReportItem.getParameterName()
-          + project);
+          + "-" + project);
       IcingaReportItem icingaReportItem = new IcingaReportItem();
       icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
       icingaReportItem.setPluginOutput(statusReportItem.getStatusText());
