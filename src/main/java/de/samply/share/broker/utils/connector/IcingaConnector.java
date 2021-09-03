@@ -44,6 +44,7 @@ public class IcingaConnector {
   private static final String CFG_ICINGA_USERNAME = "icinga.username";
   private static final String CFG_ICINGA_PASSWORD = "icinga.password";
   private static final String CFG_ICINGA_SITE_SUFFIX = "icinga.site_suffix";
+  private static final String CFG_ICINGA_PROJECT = "icinga.project";
 
   private static final String ICINGA_PREFIX = "BK ";
 
@@ -59,11 +60,13 @@ public class IcingaConnector {
   private static Gson gson;
   private static String targetPath;
   private static String siteSuffix;
+  private static String project;
   private static CredentialsProvider credentialsProvider;
   private static HttpClientContext context;
 
   static {
     try {
+      project = ProjectInfo.INSTANCE.getConfig().getProperty(CFG_ICINGA_PROJECT);
       siteSuffix = ProjectInfo.INSTANCE.getConfig().getProperty(CFG_ICINGA_SITE_SUFFIX);
       String targetHost = ProjectInfo.INSTANCE.getConfig().getProperty(CFG_ICINGA_HOST);
       targetPath = ProjectInfo.INSTANCE.getConfig().getProperty(CFG_ICINGA_PATH);
@@ -142,11 +145,8 @@ public class IcingaConnector {
       if (statusReportItem.getParameterName().equals("host")) {
         httpPost = createPostHost(sitename);
       } else {
-        if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("samply")) {
-          httpPost = createPost(sitename, statusReportItem.getParameterName() + "-gba");
-        } else {
-          httpPost = createPost(sitename, statusReportItem.getParameterName());
-        }
+        httpPost = createPost(sitename, statusReportItem.getParameterName()
+            + "-" + project);
       }
       IcingaReportItem icingaReportItem = new IcingaReportItem();
       icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
@@ -193,11 +193,8 @@ public class IcingaConnector {
       boolean isRetry) throws IcingaConnectorException {
     try {
       HttpPost httpPost;
-      if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("samply")) {
-        httpPost = createPost(sitename, statusReportItem.getParameterName() + "-gba");
-      } else {
-        httpPost = createPost(sitename, statusReportItem.getParameterName());
-      }
+      httpPost = createPost(sitename, statusReportItem.getParameterName()
+          + "-" + project);
       IcingaReportItem icingaReportItem = new IcingaReportItem();
       icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
       icingaReportItem.setPluginOutput(statusReportItem.getStatusText());

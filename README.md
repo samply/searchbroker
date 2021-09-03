@@ -65,6 +65,36 @@ mvn install -Psamply
         -e CATALINA_OPTS='"-Xmx2g"' \
     searchbroker:latest
 
+| Envionment variable | Meaning | Default |
+|---|---|---|
+|POSTGRES_HOST|URL of the Postgres host|
+|POSTGRES_PORT|Postgres port|5432
+|POSTGRES_DB|Postgres Database|
+|POSTGRES_USER|Postgres user|
+|POSTGRES_PASS|Postgres password|
+|MAIL_HOST|Mail server|
+|MAIL_PORT|Port of the mail server|
+|MAIL_PROTOCOL|Mail server protocol|smtp
+|MAIL_FROM_ADDRESS|Default FROM mail address|
+|MAIL_FROM_NAME|Default name for mail address|
+|AUTH_HOST|Authentication server url|
+|AUTH_PUBLIC_KEY|public key of the authentication server||
+|AUTH_CLIENT_ID|client id for the authentication server||
+|PROXY_HOST|Proxy url||
+|PROXY_PORT|Proxy port||
+|BROKER_NAME|name of the searchbroker||
+|MDR_URL|MDR url||
+|ICINGA_HOST|url of the monitoring server||
+|ICINGA_PATH|rest api path of the monitoring server||
+|ICINGA_USERNAME|username for the monitoring api authentication||
+|ICINGA_PASSWORD|password for the monitoring api authentication||
+|ICINGA_SITE_SUFFIX|suffix for grouping the banks in one group||
+|ICINGA_PROJECT|under which project the searchbroker runs||
+|FEATURE_CREATE_NEW_SITE|if the connector can create new sites|false|
+|LOG_LEVEL|tomcat log level|info|
+|CATALINA_OPTS|configuration for tomcat||
+
+
 
 ### Manual
 
