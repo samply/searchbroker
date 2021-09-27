@@ -38,7 +38,7 @@ public final class InquiryUtil {
   private static final Logger logger = LogManager.getLogger(InquiryUtil.class);
 
   // Prevent instantiation
-  private InquiryUtil() {
+  public InquiryUtil() {
   }
 
   /**

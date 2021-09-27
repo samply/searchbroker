@@ -2,8 +2,8 @@ package de.samply.share.broker.control;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.samply.share.broker.model.db.tables.pojos.Bank;
 import de.samply.share.broker.model.db.tables.pojos.BankSite;
+import de.samply.share.broker.model.db.tables.pojos.Inquiry;
 import de.samply.share.broker.model.db.tables.pojos.InquirySite;
 import de.samply.share.broker.model.db.tables.pojos.Reply;
 import de.samply.share.broker.model.db.tables.pojos.Site;
@@ -14,12 +14,12 @@ import de.samply.share.broker.monitoring.ResultList;
 import de.samply.share.broker.rest.InquiryHandler;
 import de.samply.share.broker.statistics.NTokenHandler;
 import de.samply.share.broker.utils.db.BankSiteUtil;
-import de.samply.share.broker.utils.db.BankUtil;
 import de.samply.share.broker.utils.db.InquirySiteUtil;
+import de.samply.share.broker.utils.db.InquiryUtil;
 import de.samply.share.broker.utils.db.ReplyUtil;
 import de.samply.share.broker.utils.db.SiteUtil;
 import de.samply.share.common.model.dto.monitoring.StatusReportItem;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,6 +131,13 @@ public class SearchController {
    */
   public static String getResultFromQuery(int inquiryId) {
     ResultList resultList = new ResultList();
+    Inquiry inquiry = new InquiryUtil().fetchInquiryById(inquiryId);
+    if (inquiry == null) {
+      String resultJson = "{\"Success\":False,\"ExitStatus\":"
+          + EnumReportMonitoring.ICINGA_STATUS_WARNING.getValue()
+          + ",\"Message\":\"No query found\"}";
+      return new Gson().toJson(resultJson).replace("\\", "");
+    }
     List<Reply> replyList = new ReplyUtil().getReplyforInquriy(inquiryId);
     for (Reply reply : replyList) {
       StatusReportItem statusReportItem = new StatusReportItem();
@@ -151,14 +158,21 @@ public class SearchController {
           reply.getRetrievedat()));
       resultList.getResultList().add(report);
     }
-    List<Report> notAnsweredBanks = checkNotAnsweredBanks(replyList, inquiryId);
-    if (notAnsweredBanks.size() == 0) {
-      resultList.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_OK.getValue());
+    if (replyList.size() > 0) {
+      List<Report> notAnsweredBanks = checkNotAnsweredBanks(replyList, inquiryId);
+      if (notAnsweredBanks.size() == 0) {
+        resultList.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_OK.getValue());
+      } else {
+        resultList.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_WARNING.getValue());
+      }
+      resultList.getResultList().addAll(notAnsweredBanks);
+      return new Gson().toJson(resultList).replace("\\", "");
     } else {
-      resultList.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_WARNING.getValue());
+      String resultJson =
+          "{\"Success\":true,\"ExitStatus\":" + EnumReportMonitoring.ICINGA_STATUS_OK.getValue()
+              + ",\"Message\":\"No results yet\"}";
+      return new Gson().toJson(resultJson).replace("\\", "");
     }
-    resultList.getResultList().addAll(notAnsweredBanks);
-    return new Gson().toJson(resultList).replace("\\", "");
   }
 
   private static List<Report> checkNotAnsweredBanks(List<Reply> replyList, int inquiryId) {

@@ -1,7 +1,9 @@
 package de.samply.share.broker.utils.db;
 
 import de.samply.share.broker.jdbc.ResourceManager;
+import de.samply.share.broker.model.db.tables.daos.InquiryDao;
 import de.samply.share.broker.model.db.tables.daos.ReplyDao;
+import de.samply.share.broker.model.db.tables.pojos.Inquiry;
 import de.samply.share.broker.model.db.tables.pojos.Reply;
 import java.sql.Connection;
 import java.sql.SQLException;
