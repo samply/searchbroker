@@ -153,6 +153,7 @@ public class Searchbroker {
         Site site = SiteUtil.fetchSiteByNameIgnoreCase(biobankName);
         jsonObject.put("biobankId", site.getBiobankid());
         jsonObject.put("collectionId", site.getCollectionid());
+        jsonObject.put("name", biobankName);
         biobank.add(jsonObject);
       }
       return addCorsHeaders(Response.ok(biobank));

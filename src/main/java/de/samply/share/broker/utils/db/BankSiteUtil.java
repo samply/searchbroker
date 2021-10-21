@@ -248,7 +248,7 @@ public final class BankSiteUtil {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    return null;
+    return bankSiteList;
   }
 
   /**
