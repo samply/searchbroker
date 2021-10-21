@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Change icinga project value by docker environment
 - Monitoring api for active checks
+- Biobankname will also send when calling directory id api
 ### Changed
 - Share-dto version 5.1.0
 - Use gson while saving reply

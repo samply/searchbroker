@@ -150,8 +150,8 @@ public class SearchController {
       statusReportItem.setStatusText(countJson.toString());
       Report report = new Report();
       report.setStatusReportItem(statusReportItem);
-      report.setTarget(SiteUtil.fetchSiteById(reply.getBankId()).getName());
       BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(reply.getBankId());
+      report.setTarget(SiteUtil.fetchSiteById(bankSite.getSiteId()).getName());
       InquirySite inquirySite = InquirySiteUtil
           .fetchInquirySiteForSiteIdAndInquiryId(bankSite.getSiteId(), inquiryId);
       report.setExecutionTime(report.calculateExecutionTime(inquirySite.getRetrievedAt(),
