@@ -231,6 +231,7 @@ public class Monitoring {
           SearchController.releaseQuery(new Gson().toJson(queryObject.getCqlQueryList()),
               queryObject.getTarget())).build();
     } catch (Exception e) {
+      logger.error(e);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -252,6 +253,7 @@ public class Monitoring {
       }
       return Response.ok(SearchController.getResultFromQuery(queryId)).build();
     } catch (Exception e) {
+      logger.error(e);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }

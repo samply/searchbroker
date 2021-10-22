@@ -142,6 +142,7 @@ public class InquiryHandler {
       Gson gson = new Gson();
       queryDto = gson.fromJson(simpleQueryDtoJson, EssentialSimpleQueryDto.class);
     } catch (Exception e) {
+      logger.error(e);
       e.printStackTrace();
     }
 
@@ -242,6 +243,7 @@ public class InquiryHandler {
 
       returnValue = inquiry.getId();
     } catch (SQLException e) {
+      logger.error(e);
       e.printStackTrace();
     }
 
@@ -311,7 +313,7 @@ public class InquiryHandler {
       }
 
     } catch (SQLException e) {
-      logger.warn("SQL Exception when trying to spawn project.");
+      logger.error("SQL Exception when trying to spawn project.");
     }
   }
 

@@ -14,17 +14,19 @@ import de.samply.share.broker.monitoring.ResultList;
 import de.samply.share.broker.rest.InquiryHandler;
 import de.samply.share.broker.statistics.NTokenHandler;
 import de.samply.share.broker.utils.db.BankSiteUtil;
+import de.samply.share.broker.utils.db.BankUtil;
 import de.samply.share.broker.utils.db.InquirySiteUtil;
 import de.samply.share.broker.utils.db.InquiryUtil;
 import de.samply.share.broker.utils.db.ReplyUtil;
 import de.samply.share.broker.utils.db.SiteUtil;
 import de.samply.share.common.model.dto.monitoring.StatusReportItem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jooq.tools.json.JSONArray;
 import org.jooq.tools.json.JSONObject;
 import org.jooq.tools.json.JSONParser;
@@ -37,6 +39,7 @@ public class SearchController {
 
 
   private static NTokenHandler N_TOKEN_HANDLER = new NTokenHandler();
+  private static Logger logger = LogManager.getLogger(SearchController.class);
 
   /**
    * release query from Icinga for bridgeheads.
@@ -129,34 +132,41 @@ public class SearchController {
    * @param inquiryId the id of the query
    * @return the results of the sites
    */
-  public static String getResultFromQuery(int inquiryId) {
+  public static String getResultFromQuery(int inquiryId) throws Exception {
     ResultList resultList = new ResultList();
-    Inquiry inquiry = new InquiryUtil().fetchInquiryById(inquiryId);
-    if (inquiry == null) {
-      String resultJson = "{\"Success\":False,\"ExitStatus\":"
-          + EnumReportMonitoring.ICINGA_STATUS_WARNING.getValue()
-          + ",\"Message\":\"No query found\"}";
-      return new Gson().toJson(resultJson).replace("\\", "");
-    }
     List<Reply> replyList = new ReplyUtil().getReplyforInquriy(inquiryId);
-    for (Reply reply : replyList) {
-      StatusReportItem statusReportItem = new StatusReportItem();
-      statusReportItem.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_OK.getValue());
-      com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
-      int count = parser.parse(reply.getContent()).getAsJsonObject().get("donor").getAsJsonObject()
-          .get("count").getAsInt();
-      JsonObject countJson = new JsonObject();
-      countJson.addProperty("count", count);
-      statusReportItem.setStatusText(countJson.toString());
-      Report report = new Report();
-      report.setStatusReportItem(statusReportItem);
-      BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(reply.getBankId());
-      report.setTarget(SiteUtil.fetchSiteById(bankSite.getSiteId()).getName());
-      InquirySite inquirySite = InquirySiteUtil
-          .fetchInquirySiteForSiteIdAndInquiryId(bankSite.getSiteId(), inquiryId);
-      report.setExecutionTime(report.calculateExecutionTime(inquirySite.getRetrievedAt(),
-          reply.getRetrievedat()));
-      resultList.getResultList().add(report);
+    try {
+      Inquiry inquiry = new InquiryUtil().fetchInquiryById(inquiryId);
+      if (inquiry == null) {
+        String resultJson = "{\"Success\":False,\"ExitStatus\":"
+            + EnumReportMonitoring.ICINGA_STATUS_WARNING.getValue()
+            + ",\"Message\":\"No query found\"}";
+        return new Gson().toJson(resultJson).replace("\\", "");
+      }
+      for (Reply reply : replyList) {
+        StatusReportItem statusReportItem = new StatusReportItem();
+        statusReportItem.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_OK.getValue());
+        com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
+        int count = parser.parse(reply.getContent()).getAsJsonObject().get("donor")
+            .getAsJsonObject()
+            .get("count").getAsInt();
+        JsonObject countJson = new JsonObject();
+        countJson.addProperty("count", count);
+        statusReportItem.setStatusText(countJson.toString());
+        Report report = new Report();
+        report.setStatusReportItem(statusReportItem);
+        BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(reply.getBankId());
+        report.setTarget(SiteUtil.fetchSiteById(bankSite.getSiteId()).getName());
+        InquirySite inquirySite = InquirySiteUtil
+            .fetchInquirySiteForSiteIdAndInquiryId(bankSite.getSiteId(), inquiryId);
+        report.setExecutionTime(report.calculateExecutionTime(inquirySite.getRetrievedAt(),
+            reply.getRetrievedat()));
+        resultList.getResultList().add(report);
+      }
+    } catch (Exception e) {
+      throw new Exception(
+          "Error while reading reply for inquiry " + inquiryId + ".Current resultList:"
+              + resultList + ". " + e);
     }
     if (replyList.size() > 0) {
       List<Report> notAnsweredBanks = checkNotAnsweredBanks(replyList, inquiryId);
@@ -175,29 +185,35 @@ public class SearchController {
     }
   }
 
-  private static List<Report> checkNotAnsweredBanks(List<Reply> replyList, int inquiryId) {
-    List<Integer> idsAnswered = replyList.stream().map(Reply::getBankId)
-        .collect(Collectors.toList());
-    List<Integer> allIds = BankSiteUtil.fetchBankSiteBySiteIdList(
-            InquirySiteUtil.fetchInquirySitesForInquiryId(inquiryId).stream()
-                .map(InquirySite::getSiteId).collect(
-                    Collectors.toList())).stream()
-        .map(BankSite::getBankId).collect(Collectors.toList());
-    List<Integer> differences = allIds.stream()
-        .filter(element -> !idsAnswered.contains(element))
-        .collect(Collectors.toList());
-    return createReportForNotAnsweredBanks(differences);
+  private static List<Report> checkNotAnsweredBanks(List<Reply> replyList, int inquiryId)
+      throws Exception {
+    try {
+      List<Integer> idsAnswered = replyList.stream().map(Reply::getBankId)
+          .collect(Collectors.toList());
+      List<Integer> allIds = BankSiteUtil.fetchBankSiteBySiteIdList(
+              InquirySiteUtil.fetchInquirySitesForInquiryId(inquiryId).stream()
+                  .map(InquirySite::getSiteId).collect(
+                      Collectors.toList())).stream()
+          .map(BankSite::getBankId).collect(Collectors.toList());
+      List<Integer> differences = allIds.stream()
+          .filter(element -> !idsAnswered.contains(element))
+          .collect(Collectors.toList());
+      return createReportForNotAnsweredBanks(differences);
+    } catch (Exception e) {
+      throw new Exception("Error while checking not answered biobanks" + e);
+    }
   }
 
   private static List<Report> createReportForNotAnsweredBanks(List<Integer> bankIds) {
     List<Report> reportList = new ArrayList<>();
     for (int id : bankIds) {
+      logger.info("BankId that not answered: " + id);
       Report report = new Report();
       StatusReportItem statusReportItem = new StatusReportItem();
       statusReportItem.setExitStatus(EnumReportMonitoring.ICINGA_STATUS_ERROR.getValue());
       statusReportItem.setStatusText("No answer");
       report.setStatusReportItem(statusReportItem);
-      report.setTarget(SiteUtil.fetchSiteById(id).getName());
+      report.setTarget(BankUtil.getSiteForBankId(id).getName());
       reportList.add(report);
     }
     return reportList;
