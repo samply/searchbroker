@@ -150,9 +150,7 @@ public class SearchController {
         int count = parser.parse(reply.getContent()).getAsJsonObject().get("donor")
             .getAsJsonObject()
             .get("count").getAsInt();
-        JsonObject countJson = new JsonObject();
-        countJson.addProperty("count", count);
-        statusReportItem.setStatusText(countJson.toString());
+        statusReportItem.setStatusText("count: " + count);
         Report report = new Report();
         report.setStatusReportItem(statusReportItem);
         BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(reply.getBankId());
@@ -165,8 +163,8 @@ public class SearchController {
       }
     } catch (Exception e) {
       throw new Exception(
-          "Error while reading reply for inquiry " + inquiryId + ".Current resultList:"
-              + resultList + ". " + e);
+          "Error while reading reply for inquiry " + inquiryId + " "
+              + ". " + e);
     }
     if (replyList.size() > 0) {
       List<Report> notAnsweredBanks = checkNotAnsweredBanks(replyList, inquiryId);
