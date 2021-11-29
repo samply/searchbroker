@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import javax.ws.rs.NotFoundException;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -149,51 +148,5 @@ public class NTokenHandler {
     } catch (SQLException e) {
       logger.error("SQL Exception caught", e);
     }
-  }
-
-  /**
-   * Save the selected biobanks in the database.
-   * @param ntoken the nToken
-   * @param selectedBiobank the selected biobanks
-   * @throws NotFoundException if the query was not found by the nToken
-   */
-  public void saveSelectedBiobank(String ntoken, String selectedBiobank) throws NotFoundException {
-    try (Connection connection = ResourceManager.getConnection()) {
-      Configuration configuration = new DefaultConfiguration().set(connection)
-          .set(SQLDialect.POSTGRES);
-      NtokenQueryDao ntokenQueryDao = new NtokenQueryDao(configuration);
-      List<NtokenQuery> ntokenQueries = ntokenQueryDao.fetch(Tables.NTOKEN_QUERY.NTOKEN, ntoken);
-      if (ntokenQueries.isEmpty()) {
-        throw new NotFoundException("Not found the query by the given n-Token");
-      }
-      Optional<NtokenQuery> latestNTokenQueryOptional =
-              ntokenQueries.stream().max(Comparator.comparing(NtokenQuery::getWascreated));
-      NtokenQuery ntokenQuery = latestNTokenQueryOptional.get();
-      ntokenQuery.setSelectedBiobank(selectedBiobank);
-      ntokenQueryDao.update(ntokenQuery);
-    } catch (SQLException e) {
-      logger.error("SQL Exception caught", e);
-    }
-  }
-
-  /**
-   * Get the selected biobanks by the nToken.
-   * @param ntoken n-Token
-   * @return the selected biobanks
-   * @throws SQLException exception in the database
-   */
-  public String getSelectedBiobank(String ntoken) throws SQLException {
-    Connection connection = ResourceManager.getConnection();
-    Configuration configuration = new DefaultConfiguration().set(connection)
-        .set(SQLDialect.POSTGRES);
-    NtokenQueryDao ntokenQueryDao = new NtokenQueryDao(configuration);
-    List<NtokenQuery> ntokenQueries = ntokenQueryDao.fetch(Tables.NTOKEN_QUERY.NTOKEN, ntoken);
-    if (ntokenQueries.isEmpty()) {
-      throw new NotFoundException("Not found the query by the given n-Token");
-    }
-    Optional<NtokenQuery> latestNTokenQueryOptional =
-            ntokenQueries.stream().max(Comparator.comparing(NtokenQuery::getWascreated));
-    NtokenQuery ntokenQuery = latestNTokenQueryOptional.get();
-    return ntokenQuery.getSelectedBiobank();
   }
 }

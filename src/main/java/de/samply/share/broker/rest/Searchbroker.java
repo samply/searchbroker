@@ -29,7 +29,7 @@ import de.samply.share.common.utils.Constants;
 import de.samply.share.common.utils.ProjectInfo;
 import de.samply.share.common.utils.SamplyShareUtils;
 import de.samply.share.essentialquery.EssentialSimpleQueryDto;
-import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -154,6 +153,7 @@ public class Searchbroker {
         Site site = SiteUtil.fetchSiteByNameIgnoreCase(biobankName);
         jsonObject.put("biobankId", site.getBiobankid());
         jsonObject.put("collectionId", site.getCollectionid());
+        jsonObject.put("name", biobankName);
         biobank.add(jsonObject);
       }
       return addCorsHeaders(Response.ok(biobank));
@@ -238,108 +238,6 @@ public class Searchbroker {
       LOGGER.error(e.getMessage());
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
-  }
-
-  /**
-   * Save the selected biobanks for the negotiator.
-   * @return <CODE>200</CODE> the selected biobanks are saved
-   *        <CODE>400</CODE> if the inquiry id can't be parsed
-   *        <CODE>401</CODE> if the provided credentials do not allow to read this inquiry
-   *        <CODE>404</CODE> if no inquiry with this id was found
-   *        <CODE>500</CODE> on any other error
-   */
-  @Secured
-  @Path("/saveSelectedBiobank")
-  @POST
-  @APIResponses({
-          @APIResponse(
-                  responseCode = "200",
-                  description = "ok"),
-          @APIResponse(responseCode = "400", description = "Query by n-Token not found"),
-          @APIResponse(responseCode = "500", description = "Internal Server Error")
-  })
-  @Consumes({MediaType.APPLICATION_JSON})
-  @Operation(summary = "Save the selected biobanks for the negotiator")
-  public Response saveSelectedBiobank(@QueryParam("ntoken") String ntoken,
-                                      @QueryParam("selectedBiobanks") String selectedBiobanks) {
-    try {
-      new NTokenHandler().saveSelectedBiobank(ntoken, selectedBiobanks);
-      return Response.ok().build();
-    } catch (NotFoundException e) {
-      LOGGER.error(e.getMessage());
-      return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage()).build();
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  /**
-   * Get OPTIONS-Call for the path "saveSelectedBiobank".
-   *
-   * @return OPTIONS response.
-   */
-  @OPTIONS
-  @Path("/saveSelectedBiobank")
-  @Consumes({MediaType.APPLICATION_JSON})
-  @APIResponses({
-      @APIResponse(responseCode = "204", description = "no-content")
-  })
-  @Operation(summary = "Save the selected biobanks for the negotiator (OPTIONS for CORS)")
-  public Response saveSelectedBiobankOptions() {
-    return createPreflightCorsResponse(HttpMethod.POST,
-        "origin, accept, authorization");
-  }
-
-  /**
-   * Save the selected biobanks for the negotiator.
-   * @return <CODE>200</CODE> the selected biobanks are saved
-   *        <CODE>400</CODE> if the inquiry id can't be parsed
-   *        <CODE>401</CODE> if the provided credentials do not allow to read this inquiry
-   *        <CODE>404</CODE> if no inquiry with this id was found
-   *        <CODE>500</CODE> on any other error
-   */
-  @Secured
-  @Path("/readSelectedBiobank")
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes({MediaType.APPLICATION_JSON})
-  @APIResponses({
-          @APIResponse(
-                  responseCode = "200",
-                  description = "ok"),
-          @APIResponse(responseCode = "400", description = "Query by n-Token not found"),
-          @APIResponse(responseCode = "500", description = "Internal Server Error")
-  })
-  @Operation(summary = "Read the selected biobanks for the negotiator")
-  public Response getSelectedBiobank(@QueryParam("ntoken") String ntoken) {
-    try {
-      return Response.ok(new NTokenHandler().getSelectedBiobank(ntoken)).build();
-    } catch (SQLException e) {
-      LOGGER.error(e.getMessage());
-      return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage()).build();
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-
-  /**
-   * Get OPTIONS-Call for the path "readSelectedBiobank".
-   *
-   * @return OPTIONS response.
-   */
-  @OPTIONS
-  @Path("/readSelectedBiobank")
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes({MediaType.APPLICATION_JSON})
-  @APIResponses({
-      @APIResponse(responseCode = "204", description = "no-content")
-  })
-  @Operation(summary = "Read the selected biobanks for the negotiator (OPTIONS for CORS)")
-  public Response getSelectedBiobankOptions() {
-    return createPreflightCorsResponse(HttpMethod.GET, "origin, accept, authorization");
   }
 
   /**
@@ -1162,7 +1060,7 @@ public class Searchbroker {
       @PathParam("inquiryid") int inquiryId,
       @PathParam("bankemail") String bankEmail,
       String reply) {
-
+    Timestamp timestamp = SamplyShareUtils.getCurrentSqlTimestamp();
     int bankId = Utils.getBankId(authorizationHeader, bankEmail);
 
     if (bankId < 0) {
@@ -1175,7 +1073,7 @@ public class Searchbroker {
       return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
-    if (!inquiryHandler.saveReply(inquiryId, bankId, reply)) {
+    if (!inquiryHandler.saveReply(inquiryId, bankId, reply, timestamp)) {
       LOGGER.warn("An error occurred while trying to store a reply to inquiry " + inquiryId + " by "
           + bankEmail);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
