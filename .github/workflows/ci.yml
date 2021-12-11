@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres
+        image: postgres:9.6
         env:
           POSTGRES_DB: samply.searchbroker
           POSTGRES_PASSWORD: samply
