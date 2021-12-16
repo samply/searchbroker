@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [8.4.2 - 2021-12-16]
 ### Security
-- Update Log4J to v2.16.0
+- Update Log4J to v2.16.0 ([#29](https://github.com/samply/searchbroker/pull/29))
 
 ## [8.4.1 - 2021-12-11]
 ### Security
