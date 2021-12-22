@@ -34,8 +34,9 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class InquiryUtil {
 
-  public static final long INQUIRY_TTL = TimeUnit.MINUTES.toMillis(5);
   private static final Logger logger = LogManager.getLogger(InquiryUtil.class);
+
+  public static final long INQUIRY_TTL = TimeUnit.MINUTES.toMillis(5);
 
   // Prevent instantiation
   public InquiryUtil() {

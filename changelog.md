@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.5.0 - ]
+### Added
+- Save "Structured-Query"
+### Changed
+- For the monitoring blackbox test it is necessary to add a query name in the json object
+
 ## [8.4.3 - 2022-02-17]
 ### Changed
 - MDR mappings expanded to cover all MIABIS sample types ([SampleMaterialType](https://samply.github.io/bbmri-fhir-ig/ValueSet-SampleMaterialType.html))

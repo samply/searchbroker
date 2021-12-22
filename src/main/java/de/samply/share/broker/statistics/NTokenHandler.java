@@ -22,14 +22,16 @@ import org.jooq.impl.DefaultConfiguration;
 
 public class NTokenHandler {
 
-  public static final int INQUIRY_ID_FOR_ERROR = -1;
   private static final Logger logger = LogManager.getLogger(NTokenHandler.class);
+
+  public static final int INQUIRY_ID_FOR_ERROR = -1;
 
   /**
    * Todo.
+   *
    * @param inquiryId Todo.
-   * @param ntoken Todo.
-   * @param query Todo.
+   * @param ntoken    Todo.
+   * @param query     Todo.
    * @return Todo.
    */
   public int saveNToken(int inquiryId, String ntoken, String query) {

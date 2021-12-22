@@ -18,7 +18,6 @@ import de.samply.share.model.cql.CqlQueryList;
 import de.samply.share.utils.QueryConverter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URI;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -45,13 +44,15 @@ import org.apache.logging.log4j.Logger;
 @Path("/test")
 public class Test {
 
+  private static final Logger logger = LogManager.getLogger(Test.class);
+
   private static final String QUERYLANGUAGE_QUERY = "QUERY";
   private static final String QUERYLANGUAGE_CQL = "CQL";
   final String serverHeaderValue =
       Constants.SERVER_HEADER_VALUE_PREFIX + ProjectInfo.INSTANCE.getVersionString();
+
   @Context
   UriInfo uriInfo;
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
 
   /**
    * Construct an example query with a single criteria (gender = male).
@@ -63,11 +64,11 @@ public class Test {
     Eq eq = new Eq();
     Or or = new Or();
     Attribute attribute = new Attribute();
-    if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("samply")) {
+    if (ProjectInfo.INSTANCE.getProjectName().equalsIgnoreCase("samply")) {
       attribute.setMdrKey("urn:mdr16:dataelement:23:1");
       attribute.setValue(objectFactory.createValue("female"));
 
-    } else if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("dktk")) {
+    } else if (ProjectInfo.INSTANCE.getProjectName().equalsIgnoreCase("dktk")) {
       attribute.setMdrKey("urn:dktk:dataelement:1:*");
       attribute.setValue(objectFactory.createValue("M"));
     }
@@ -141,8 +142,7 @@ public class Test {
       inquiry.setDescription(getDummyInfo().getDescription());
 
       UriBuilder uriBuilder = uriInfo.getBaseUriBuilder();
-      URI uri = uriBuilder.build();
-      inquiry.setExposeUrl(uri + "test/exposes/0");
+      inquiry.setExposeUrl(uriBuilder.path("test/exposes/0").build().toString());
 
       inquiry.setId("0");
       inquiry.setLabel(getDummyInfo().getLabel());

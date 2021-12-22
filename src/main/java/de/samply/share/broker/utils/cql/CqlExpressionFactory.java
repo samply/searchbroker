@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 class CqlExpressionFactory {
 
   private static final Logger logger = LogManager.getLogger(CqlExpressionFactory.class);
+
   private final MultiKeyMap<String, CqlConfig.CqlAtomicExpressionEntry> mapAtomicExpressions =
       new MultiKeyMap<>();
   private final MultiKeyMap<String, CqlConfig.CqlEntityTypeEntry> mapPathExpressions =
