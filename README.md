@@ -1,4 +1,3 @@
-UNMERGED BRANCH -CHANGES FROM OTHER SAMPLY TEAMS MISSING
 # Searchbroker
 
 To make samples easily accessible for researcher to help [making new treatments possible.](http://www.bbmri-eric.eu/)
