@@ -11,13 +11,13 @@ import de.samply.share.broker.model.db.tables.pojos.User;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for User Objects.
@@ -26,7 +26,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class UserUtil {
 
-  private static final Logger logger = LogManager.getLogger(UserUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserUtil.class);
 
   // Prevent instantiation
   private UserUtil() {
@@ -72,7 +72,7 @@ public final class UserUtil {
       userDao.update(user);
       user = userDao.fetchOneByAuthid(user.getAuthid());
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return user;
@@ -98,7 +98,7 @@ public final class UserUtil {
       userDao.insert(user);
       user = userDao.fetchOneByAuthid(user.getAuthid());
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return user;
@@ -250,7 +250,7 @@ public final class UserUtil {
       userDao = new UserDao(configuration);
       users = userDao.findAll();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return users;
   }
@@ -274,7 +274,7 @@ public final class UserUtil {
         user = record.into(User.class);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return user;
   }
@@ -317,7 +317,7 @@ public final class UserUtil {
         return user.getName();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return "Unbekannt";
   }

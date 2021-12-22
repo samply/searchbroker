@@ -12,18 +12,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class NTokenHandler {
 
   public static final int INQUIRY_ID_FOR_ERROR = -1;
-  private static final Logger logger = LogManager.getLogger(NTokenHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(NTokenHandler.class);
 
   /**
    * Todo.
@@ -58,7 +58,7 @@ public class NTokenHandler {
 
       return dslContext.lastID().intValue();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       return -1;
     }
   }

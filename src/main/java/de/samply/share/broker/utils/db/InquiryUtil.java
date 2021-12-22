@@ -18,14 +18,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for Inquiry Objects.
@@ -35,7 +35,7 @@ import org.jooq.impl.DefaultConfiguration;
 public final class InquiryUtil {
 
   public static final long INQUIRY_TTL = TimeUnit.MINUTES.toMillis(5);
-  private static final Logger logger = LogManager.getLogger(InquiryUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(InquiryUtil.class);
 
   // Prevent instantiation
   public InquiryUtil() {
@@ -54,7 +54,7 @@ public final class InquiryUtil {
       inquiryDao = new InquiryDao(configuration);
       inquiryDao.update(inquiry);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -75,7 +75,7 @@ public final class InquiryUtil {
       inquiry.setExpires(expiryDate);
       inquiryDao.update(inquiry);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -96,7 +96,7 @@ public final class InquiryUtil {
       inquiry.setExpires(expiryDate);
       inquiryDao.update(inquiry);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -180,7 +180,7 @@ public final class InquiryUtil {
               .equal(inquiry.getId()))
           .execute();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -228,7 +228,7 @@ public final class InquiryUtil {
           .orderBy(Tables.INQUIRY.CREATED.desc())
           .fetchInto(Inquiry.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }
@@ -257,7 +257,7 @@ public final class InquiryUtil {
           .orderBy(Tables.INQUIRY.CREATED.desc())
           .fetchInto(Inquiry.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }
@@ -286,7 +286,7 @@ public final class InquiryUtil {
           .orderBy(Tables.INQUIRY.CREATED.desc())
           .fetchInto(Inquiry.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }
@@ -318,7 +318,7 @@ public final class InquiryUtil {
           .orderBy(Tables.INQUIRY.CREATED.desc())
           .fetchInto(Inquiry.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }
@@ -338,7 +338,7 @@ public final class InquiryUtil {
       userDao = new UserDao(configuration);
       user = userDao.fetchOneById(inquiry.getAuthorId());
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return user;
   }
@@ -371,7 +371,7 @@ public final class InquiryUtil {
                 .and(Tables.INQUIRY.AUTHOR_ID.equal(userId)));
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return count;
   }
@@ -403,7 +403,7 @@ public final class InquiryUtil {
                 .and(Tables.INQUIRY.EXPIRES.greaterOrEqual(SamplyShareUtils.getCurrentDate())));
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return count;
   }
@@ -423,7 +423,7 @@ public final class InquiryUtil {
       inquiryDao = new InquiryDao(configuration);
       inquiry = inquiryDao.fetchOneById(inquiryId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiry;
   }
@@ -454,7 +454,7 @@ public final class InquiryUtil {
           .fetchInto(Inquiry.class);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }
@@ -501,7 +501,7 @@ public final class InquiryUtil {
           .fetchInto(Inquiry.class);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquiries;
   }

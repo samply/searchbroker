@@ -8,13 +8,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for InquirySite Objects.
@@ -23,7 +23,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public class InquirySiteUtil {
 
-  private static final Logger logger = LogManager.getLogger(InquirySiteUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(InquirySiteUtil.class);
 
   // Prevent instantiation
   private InquirySiteUtil() {
@@ -64,7 +64,7 @@ public class InquirySiteUtil {
       inquirySites = inquirySiteDao.fetchByInquiryId(inquiryId);
       return inquirySites;
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return new ArrayList<>();
   }
@@ -88,7 +88,7 @@ public class InquirySiteUtil {
         inquirySite = record.into(InquirySite.class);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return inquirySite;
   }

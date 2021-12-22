@@ -43,14 +43,14 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -59,7 +59,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 @Path("/monitoring")
 public class Monitoring {
 
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
   /**
    * Construct a reference query to use for the monitoring system.
@@ -231,7 +231,7 @@ public class Monitoring {
           SearchController.releaseQuery(new Gson().toJson(queryObject.getCqlQueryList()),
               queryObject.getTarget())).build();
     } catch (Exception e) {
-      logger.error(e);
+      logger.error(e.getMessage(),e);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -253,7 +253,7 @@ public class Monitoring {
       }
       return Response.ok(SearchController.getResultFromQuery(queryId)).build();
     } catch (Exception e) {
-      logger.error(e);
+      logger.error(e.getMessage(),e);
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
   }

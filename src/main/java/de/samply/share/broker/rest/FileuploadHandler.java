@@ -15,12 +15,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handle the upload of any documents.
@@ -31,7 +31,7 @@ public class FileuploadHandler {
   private static final String DOC_TYPE = "documentType";
   private static final String DOC_ID = "documentId";
   private static final String ERROR = "error";
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
   /**
    * Accept a file upload from the webinterface.
@@ -58,7 +58,7 @@ public class FileuploadHandler {
 
     try {
       buf = IOUtils.toByteArray(fileInputStream);
-      logger.debug(buf.length);
+      logger.debug(String.valueOf(buf.length));
     } catch (IOException e1) {
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();
     }
@@ -101,7 +101,7 @@ public class FileuploadHandler {
     jsonObject.put(DOC_TYPE, docType);
     jsonObject.put(DOC_ID, documentId);
 
-    logger.debug(jsonObject);
+    logger.debug(String.valueOf(jsonObject));
     return Response.ok(jsonObject.toString()).build();
   }
 

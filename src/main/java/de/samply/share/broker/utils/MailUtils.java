@@ -15,8 +15,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An utility class holding methods to send emails.
@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class MailUtils {
 
-  private static final Logger logger = LogManager.getLogger(MailUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(MailUtils.class);
   private static final String MAIL_SUBJECT_REGISTRATION_DE =
       "Ihre Registrierung am Samply.Share Suchbroker";
   private static final String MAIL_SUBJECT_REGISTRATION_EN =

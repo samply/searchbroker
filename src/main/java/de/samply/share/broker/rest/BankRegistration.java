@@ -22,13 +22,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import javax.ws.rs.core.Response;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles the whole management of connected banks. Registration, activation, deletion.
@@ -39,7 +39,7 @@ public class BankRegistration {
   /**
    * The log4j logger.
    */
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
   /**
    * Instantiates a new bank registration object.
@@ -66,7 +66,7 @@ public class BankRegistration {
       tokenrequestDao = new TokenrequestDao(configuration);
       tokenRequestList = tokenrequestDao.fetchByEmail(email);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     if (tokenRequestList != null && tokenRequestList.size() > 0) {
@@ -103,7 +103,7 @@ public class BankRegistration {
           .where(Tables.TOKENREQUEST.EMAIL.equal(email))
           .and(Tables.TOKENREQUEST.AUTHCODE.equal(authCode)).fetchAny();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     if (tokenRequestRecord != null) {
@@ -165,7 +165,7 @@ public class BankRegistration {
         responseStatus = Response.Status.NOT_FOUND;
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return responseStatus;
@@ -213,7 +213,7 @@ public class BankRegistration {
       }
       connection.commit();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       returnValue = "error";
     }
     return returnValue;
@@ -268,7 +268,7 @@ public class BankRegistration {
         }
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return Response.Status.INTERNAL_SERVER_ERROR;

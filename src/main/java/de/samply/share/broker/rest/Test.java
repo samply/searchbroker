@@ -35,8 +35,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class Test provides a REST resources for samply.share.client (and other similar products) to
@@ -51,7 +51,7 @@ public class Test {
       Constants.SERVER_HEADER_VALUE_PREFIX + ProjectInfo.INSTANCE.getVersionString();
   @Context
   UriInfo uriInfo;
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
   /**
    * Construct an example query with a single criteria (gender = male).

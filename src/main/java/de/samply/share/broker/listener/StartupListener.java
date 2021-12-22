@@ -15,13 +15,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import javax.servlet.ServletContextEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The listener interface for receiving startup events. The class that is interested in processing a
@@ -34,7 +33,7 @@ public class StartupListener implements javax.servlet.ServletContextListener {
   /**
    * The Constant logger.
    */
-  private static final Logger LOGGER = LogManager.getLogger(StartupListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(StartupListener.class);
   private SchedulerFactory sf = new StdSchedulerFactory();
 
   /* (non-Javadoc)
@@ -49,14 +48,14 @@ public class StartupListener implements javax.servlet.ServletContextListener {
       Driver driver = drivers.nextElement();
       try {
         DriverManager.deregisterDriver(driver);
-        LOGGER.info("Deregistering jdbc driver: " + driver);
+        logger.info("Deregistering jdbc driver: " + driver);
         for (Scheduler scheduler : sf.getAllSchedulers()) {
           scheduler.shutdown();
         }
       } catch (SQLException e) {
-        LOGGER.fatal("Error deregistering driver:" + driver + "\n" + e.getMessage());
+        logger.error("Error deregistering driver:" + driver + "\n" + e.getMessage());
       } catch (SchedulerException e) {
-        e.printStackTrace();
+        logger.error(e.getMessage(),e);
       }
     }
   }
@@ -67,9 +66,9 @@ public class StartupListener implements javax.servlet.ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent sce) {
     ProjectInfo.INSTANCE.initProjectMetadata(sce);
-    LOGGER.info("Loading Samply.Share.Broker v" + ProjectInfo.INSTANCE.getVersionString() + " for "
+    logger.info("Loading Samply.Share.Broker v" + ProjectInfo.INSTANCE.getVersionString() + " for "
         + ProjectInfo.INSTANCE.getProjectName());
-    LOGGER.debug("Listener to the web application startup is running. Checking configuration...");
+    logger.debug("Listener to the web application startup is running. Checking configuration...");
     Config c = Config.getInstance(System.getProperty("catalina.base") + File.separator + "conf",
         sce.getServletContext().getRealPath("/WEB-INF"));
     ProjectInfo.INSTANCE.setConfig(c);
@@ -81,7 +80,7 @@ public class StartupListener implements javax.servlet.ServletContextListener {
               System.getProperty("catalina.base") + File.separator + "conf",
               sce.getServletContext().getRealPath("/WEB-INF")).getAbsolutePath());
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     Migration.doUpgrade();
     String mdrUrl = c.getProperty("mdr.url");

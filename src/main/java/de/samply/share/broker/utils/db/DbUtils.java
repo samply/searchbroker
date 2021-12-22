@@ -4,18 +4,18 @@ import de.samply.share.broker.jdbc.ResourceManager;
 import de.samply.share.broker.model.db.tables.daos.UserDao;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Offers some helper methods for db access.
  */
 public class DbUtils {
 
-  private static final Logger logger = LogManager.getLogger(DbUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(DbUtils.class);
 
   /**
    * Check if the database is accessible.

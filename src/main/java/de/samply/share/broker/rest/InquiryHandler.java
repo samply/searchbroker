@@ -73,8 +73,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -83,13 +81,15 @@ import org.jooq.impl.DefaultConfiguration;
 import org.jooq.tools.json.JSONObject;
 import org.jooq.tools.json.JSONParser;
 import org.jooq.tools.json.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class InquiryHandler.
  */
 public class InquiryHandler {
 
-  private static final Logger logger = LogManager.getLogger(InquiryHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(InquiryHandler.class);
 
   private static final String ENTITY_TYPE_FOR_QUERY = "Donor + Sample";
   private static final String ENTITY_TYPE_FOR_CQL_PATIENT = "Patient";
@@ -142,8 +142,7 @@ public class InquiryHandler {
       Gson gson = new Gson();
       queryDto = gson.fromJson(simpleQueryDtoJson, EssentialSimpleQueryDto.class);
     } catch (Exception e) {
-      logger.error(e);
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     for (EssentialSimpleFieldDto field : queryDto.getFieldDtos()) {
@@ -243,8 +242,7 @@ public class InquiryHandler {
 
       returnValue = inquiry.getId();
     } catch (SQLException e) {
-      logger.error(e);
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return returnValue;
@@ -433,10 +431,10 @@ public class InquiryHandler {
 
       createAndSaveInquiryCriteriaTypeQuery(query, inquiry, connection);
     } catch (JAXBException e1) {
-      e1.printStackTrace();
+      logger.error(e1.getMessage(),e1);
       return 0;
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return returnValue;
@@ -473,7 +471,7 @@ public class InquiryHandler {
         returnValue = documentRecord.getValue(Tables.DOCUMENT.ID);
       }
     } catch (SQLException | IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return returnValue;
@@ -678,10 +676,10 @@ public class InquiryHandler {
       returnValue.append(stringWriter.toString());
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       returnValue.replace(0, returnValue.length(), "error");
     } catch (JAXBException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return returnValue.toString();
@@ -796,7 +794,7 @@ public class InquiryHandler {
 
       ret = stringWriter.toString();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return ret;
   }
@@ -828,7 +826,7 @@ public class InquiryHandler {
       String criteria = InquiryCriteriaUtil.fetchCriteriaForInquiryIdTypeQuery(inquiryId);
       returnValue.append(criteria);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       returnValue.replace(0, returnValue.length(), "error");
     }
     return returnValue.toString();
@@ -860,7 +858,7 @@ public class InquiryHandler {
       }
       returnValue.append(inquiry.getViewfields());
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       returnValue.replace(0, returnValue.length(), "error");
     }
     return returnValue.toString();
@@ -910,7 +908,7 @@ public class InquiryHandler {
       ret = stringWriter.toString();
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return ret;
   }
@@ -982,7 +980,7 @@ public class InquiryHandler {
     try {
       createAndSaveInquiryCriteriaTypeQuery(query, inquiry, connection);
     } catch (JAXBException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -1102,7 +1100,7 @@ public class InquiryHandler {
       }
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       returnValue = false;
     }
 

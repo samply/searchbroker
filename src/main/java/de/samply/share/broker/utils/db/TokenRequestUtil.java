@@ -6,12 +6,12 @@ import de.samply.share.broker.model.db.tables.pojos.Tokenrequest;
 import de.samply.share.common.utils.SamplyShareUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.DatePart;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for TokenRequest Objects.
@@ -20,7 +20,7 @@ import org.jooq.impl.DSL;
  */
 public final class TokenRequestUtil {
 
-  private static final Logger logger = LogManager.getLogger(TokenRequestUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(TokenRequestUtil.class);
 
   // Prevent instantiation
   private TokenRequestUtil() {
@@ -43,7 +43,7 @@ public final class TokenRequestUtil {
           .or(Tables.TOKENREQUEST.ISSUED.greaterThan(DSL.currentTimestamp()))
           .execute();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     if (affectedRows > 0) {
       logger.info("Deleted " + affectedRows + " old tokenRequests");
@@ -75,7 +75,7 @@ public final class TokenRequestUtil {
       tr.setIssued(record.getValue(Tables.TOKENREQUEST.ISSUED));
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return tr;
   }

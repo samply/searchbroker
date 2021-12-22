@@ -25,13 +25,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.parsers.ParserConfigurationException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 public class Proxy {
 
-  private static final Logger logger = LogManager.getLogger(Proxy.class);
+  private static final Logger logger = LoggerFactory.getLogger(Proxy.class);
   private static final String COMMON_CONFIG_FILENAME_SUFFIX = "_common_config.xml";
 
   /**
@@ -56,7 +56,7 @@ public class Proxy {
     } catch (UnmarshalException ue) {
       throw new RuntimeException("Unable to unmarshal config file");
     } catch (SAXException | JAXBException | ParserConfigurationException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return null;
   }
@@ -91,7 +91,7 @@ public class Proxy {
       configParams.put(USER_AGENT, userAgent.toString());
 
     } catch (NumberFormatException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     HttpConnector httpConnector = new HttpConnector(configParams);
     return httpConnector;

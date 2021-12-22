@@ -17,13 +17,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for Project Objects.
@@ -32,7 +32,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class ProjectUtil {
 
-  private static final Logger logger = LogManager.getLogger(ProjectUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(ProjectUtil.class);
 
   // Prevent instantiation
   private ProjectUtil() {
@@ -75,7 +75,7 @@ public final class ProjectUtil {
           .fetchInto(Project.class);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return projects;
   }
@@ -123,7 +123,7 @@ public final class ProjectUtil {
       }
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return projects;
   }
@@ -143,7 +143,7 @@ public final class ProjectUtil {
       userDao = new UserDao(configuration);
       user = userDao.fetchOneById(project.getProjectleaderId());
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return user;
   }
@@ -180,7 +180,7 @@ public final class ProjectUtil {
       siteDao = new SiteDao(configuration);
       site = siteDao.fetchOneById(siteIdForUser);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return site;
   }
@@ -222,7 +222,7 @@ public final class ProjectUtil {
       }
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return count;
   }
@@ -240,7 +240,7 @@ public final class ProjectUtil {
       projectDao = new ProjectDao(configuration);
       projectDao.update(project);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -259,7 +259,7 @@ public final class ProjectUtil {
       inquiryDao = new InquiryDao(configuration);
       inquiries = inquiryDao.fetchByProjectId(projectId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     if (inquiries == null || inquiries.size() == 0) {
       logger.error("No Inquiry associated with project " + projectId);
@@ -285,7 +285,7 @@ public final class ProjectUtil {
           .from(Tables.PROJECT.join(Tables.PROJECT_SITE).onKey().join(Tables.SITE).onKey())
           .where((Tables.PROJECT.ID).equal(project.getId())).fetchInto(Site.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return sites;
   }
@@ -332,7 +332,7 @@ public final class ProjectUtil {
       projectDao = new ProjectDao(configuration);
       project = projectDao.fetchOneById(projectId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return project;
   }
@@ -378,7 +378,7 @@ public final class ProjectUtil {
       projectDao = new ProjectDao(configuration);
       project = projectDao.fetchOneById(projectId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return project;
   }
@@ -400,7 +400,7 @@ public final class ProjectUtil {
       project = projectDao.fetchOneById(projectId);
       projectTitle = project.getName();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return projectTitle;
   }
@@ -421,7 +421,7 @@ public final class ProjectUtil {
           .from(Tables.PROJECT.join(Tables.PROJECT_SITE).onKey().join(Tables.SITE).onKey())
           .where((Tables.PROJECT.ID).equal(projectId)).fetchInto(Site.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return sites;
   }

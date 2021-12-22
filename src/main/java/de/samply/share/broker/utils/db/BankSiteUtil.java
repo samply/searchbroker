@@ -11,11 +11,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for BankSite Objects.
@@ -24,7 +24,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class BankSiteUtil {
 
-  private static final Logger logger = LogManager.getLogger(BankSiteUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(BankSiteUtil.class);
 
   // Prevent instantiation
   private BankSiteUtil() {
@@ -154,7 +154,7 @@ public final class BankSiteUtil {
         return bankSites.get(0);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return null;
   }
@@ -179,7 +179,7 @@ public final class BankSiteUtil {
         return bankSites.get(0);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return null;
   }
@@ -221,7 +221,7 @@ public final class BankSiteUtil {
         return bankSites.get(0);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return null;
   }
@@ -246,7 +246,7 @@ public final class BankSiteUtil {
         }
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return bankSiteList;
   }

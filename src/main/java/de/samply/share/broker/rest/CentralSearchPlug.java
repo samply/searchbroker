@@ -30,9 +30,9 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.omnifaces.model.tree.TreeModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class CentralSearchPlug.
@@ -41,7 +41,7 @@ import org.omnifaces.model.tree.TreeModel;
 @Path("/cs")
 public class CentralSearchPlug {
 
-  private static final Logger logger = LogManager.getLogger(CentralSearchPlug.class);
+  private static final Logger logger = LoggerFactory.getLogger(CentralSearchPlug.class);
 
   private final String serverHeaderKey = "Server";
 

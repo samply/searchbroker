@@ -10,13 +10,13 @@ import de.samply.share.broker.model.db.tables.pojos.User;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for Contact Objects.
@@ -25,7 +25,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class ContactUtil {
 
-  private static final Logger logger = LogManager.getLogger(ContactUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(ContactUtil.class);
 
   // Prevent instantiation
   private ContactUtil() {
@@ -48,7 +48,7 @@ public final class ContactUtil {
       contact = contactDao.fetchOneById(user.getContactId());
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return contact;
   }
@@ -70,7 +70,7 @@ public final class ContactUtil {
       contactDao.update(contact);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
       ret = "error";
     }
     return ret;
@@ -127,7 +127,7 @@ public final class ContactUtil {
       contactDao.update(contact);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return contact;
   }

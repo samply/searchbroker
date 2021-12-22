@@ -25,12 +25,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.tools.json.JSONArray;
 import org.jooq.tools.json.JSONObject;
 import org.jooq.tools.json.JSONParser;
 import org.jooq.tools.json.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * holds methods and information necessary to create and display queries.
@@ -39,7 +39,7 @@ public class SearchController {
 
 
   private static NTokenHandler N_TOKEN_HANDLER = new NTokenHandler();
-  private static Logger logger = LogManager.getLogger(SearchController.class);
+  private static Logger logger = LoggerFactory.getLogger(SearchController.class);
 
   /**
    * release query from Icinga for bridgeheads.
@@ -119,7 +119,7 @@ public class SearchController {
           }
           jsonArray.add(json);
         } catch (ParseException e) {
-          e.printStackTrace();
+          logger.error(e.getMessage(),e);
         }
       }
     }
@@ -162,6 +162,7 @@ public class SearchController {
         resultList.getResultList().add(report);
       }
     } catch (Exception e) {
+      logger.error(e.getMessage(),e);
       throw new Exception(
           "Error while reading reply for inquiry " + inquiryId + " "
               + ". " + e);
@@ -198,6 +199,7 @@ public class SearchController {
           .collect(Collectors.toList());
       return createReportForNotAnsweredBanks(differences);
     } catch (Exception e) {
+      logger.error(e.getMessage(),e);
       throw new Exception("Error while checking not answered biobanks" + e);
     }
   }

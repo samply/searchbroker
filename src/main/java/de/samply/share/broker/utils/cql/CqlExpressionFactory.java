@@ -19,12 +19,12 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class CqlExpressionFactory {
 
-  private static final Logger logger = LogManager.getLogger(CqlExpressionFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(CqlExpressionFactory.class);
   private final MultiKeyMap<String, CqlConfig.CqlAtomicExpressionEntry> mapAtomicExpressions =
       new MultiKeyMap<>();
   private final MultiKeyMap<String, CqlConfig.CqlEntityTypeEntry> mapPathExpressions =

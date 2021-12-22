@@ -15,13 +15,13 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for Document Objects.
@@ -30,7 +30,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class DocumentUtil {
 
-  private static final Logger logger = LogManager.getLogger(DocumentUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(DocumentUtil.class);
 
   // Prevent instantiation
   private DocumentUtil() {
@@ -51,7 +51,7 @@ public final class DocumentUtil {
       documentDao = new DocumentDao(configuration);
       document = documentDao.fetchOneById(documentId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return document;
   }
@@ -71,7 +71,7 @@ public final class DocumentUtil {
       documentDao = new DocumentDao(configuration);
       documents = documentDao.fetchByProjectId(projectId);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return documents;
   }
@@ -95,7 +95,7 @@ public final class DocumentUtil {
           ).fetchInto(Document.class);
 
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return documents;
   }
@@ -128,7 +128,7 @@ public final class DocumentUtil {
       documentDao = new DocumentDao(configuration);
       documentDao.update(document);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -191,7 +191,7 @@ public final class DocumentUtil {
           )
           .execute();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     logger.info("Deleted " + affectedRows + " old unbound documents");
     return affectedRows;
@@ -216,7 +216,7 @@ public final class DocumentUtil {
       bos.write(document.getData());
       bos.close();
     } catch (SQLException | IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return bos;
   }
@@ -249,7 +249,7 @@ public final class DocumentUtil {
       documentType = document.getDocumentType();
       documentDao.delete(document);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return documentType;
   }
@@ -269,7 +269,7 @@ public final class DocumentUtil {
           )
           .execute();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -321,7 +321,7 @@ public final class DocumentUtil {
           )
           .fetchOneInto(Document.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return expose;
   }
@@ -344,7 +344,7 @@ public final class DocumentUtil {
           )
           .fetchOneInto(Document.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return expose;
   }
@@ -367,7 +367,7 @@ public final class DocumentUtil {
           )
           .fetchOneInto(Document.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return vote;
   }
@@ -400,7 +400,7 @@ public final class DocumentUtil {
         newExposeFile.delete();
       }
     } catch (SQLException | IOException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 }

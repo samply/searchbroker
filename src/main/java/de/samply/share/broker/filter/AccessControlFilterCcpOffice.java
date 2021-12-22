@@ -9,10 +9,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.omnifaces.filter.HttpFilter;
 import org.omnifaces.util.Servlets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Access Control Filter.
@@ -21,7 +21,7 @@ import org.omnifaces.util.Servlets;
 @WebFilter("/ccp_office/*")
 public class AccessControlFilterCcpOffice extends HttpFilter {
 
-  private static final Logger logger = LogManager.getLogger(AccessControlFilterCcpOffice.class);
+  private static final Logger logger = LoggerFactory.getLogger(AccessControlFilterCcpOffice.class);
 
   /**
    * The Constant SESSION_ROLE.

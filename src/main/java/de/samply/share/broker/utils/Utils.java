@@ -46,11 +46,11 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A collection of utility methods.
@@ -58,7 +58,7 @@ import org.jooq.Record;
 public class Utils {
 
   public static final String USER_AGENT = "http.useragent";
-  private static final Logger logger = LogManager.getLogger(Utils.class);
+  private static final Logger logger = LoggerFactory.getLogger(Utils.class);
   private static final String PROXY_REALM = "proxy.realm";
   private static final String PROXY_HTTPS_PASSWORD = "proxy.https.password";
   private static final String PROXY_HTTPS_USERNAME = "proxy.https.username";
@@ -113,7 +113,7 @@ public class Utils {
 
       bankId = r.getValue(Tables.BANK.ID);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return bankId;
   }
@@ -152,7 +152,7 @@ public class Utils {
 
       bankId = r.getValue(Tables.BANK.ID);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
 
     return bankId;

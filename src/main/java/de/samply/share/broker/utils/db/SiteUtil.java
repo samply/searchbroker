@@ -12,13 +12,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for Site Objects.
@@ -27,7 +27,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class SiteUtil {
 
-  private static final Logger logger = LogManager.getLogger(SiteUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(SiteUtil.class);
 
   // Prevent instantiation
   private SiteUtil() {
@@ -62,7 +62,7 @@ public final class SiteUtil {
       siteDao = new SiteDao(configuration);
       siteDao.insert(newSites);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
   }
 
@@ -80,7 +80,7 @@ public final class SiteUtil {
       siteDao = new SiteDao(configuration);
       sites = siteDao.findAll();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return sites;
   }
@@ -101,7 +101,7 @@ public final class SiteUtil {
           .from(Tables.INQUIRY.join(Tables.INQUIRY_SITE).onKey().join(Tables.SITE).onKey())
           .where((Tables.INQUIRY.ID).equal(inquiryId)).fetchInto(Site.class);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return sites;
   }
@@ -121,7 +121,7 @@ public final class SiteUtil {
       siteDao = new SiteDao(configuration);
       site = siteDao.fetchOneByName(name);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return site;
   }
@@ -141,7 +141,7 @@ public final class SiteUtil {
       siteDao = new SiteDao(configuration);
       site = siteDao.fetchOneById(id);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return site;
   }
@@ -165,7 +165,7 @@ public final class SiteUtil {
         site = record.into(Site.class);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return site;
   }
@@ -190,7 +190,7 @@ public final class SiteUtil {
         siteNames.add(site.getName());
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return siteNames;
   }

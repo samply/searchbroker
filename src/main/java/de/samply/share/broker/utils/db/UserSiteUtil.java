@@ -12,11 +12,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class provides static methods for CRUD operations for UserSite Objects.
@@ -25,7 +25,7 @@ import org.jooq.impl.DefaultConfiguration;
  */
 public final class UserSiteUtil {
 
-  private static final Logger logger = LogManager.getLogger(UserSiteUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserSiteUtil.class);
 
   // Prevent instantiation
   private UserSiteUtil() {
@@ -51,7 +51,7 @@ public final class UserSiteUtil {
         return userSites.get(0);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(),e);
     }
     return null;
   }
@@ -205,6 +205,7 @@ public final class UserSiteUtil {
           setSiteForUser(user, site, true);
         }
       } catch (SQLException e) {
+        logger.error(e.getMessage(),e);
         throw new RuntimeException(e);
       }
 
