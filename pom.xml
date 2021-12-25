@@ -93,7 +93,7 @@
         <postgresql.version>42.2.19</postgresql.version>
         <commons-io.version>2.6</commons-io.version>
         <guava.version>24.0-jre</guava.version>
-        <swagger-ui.version>3.25.0</swagger-ui.version>
+        <swagger-ui.version>3.52.5</swagger-ui.version>
         <poi-ooxml.version>3.17</poi-ooxml.version>
         <easymock.version>4.0.2</easymock.version>
         <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
