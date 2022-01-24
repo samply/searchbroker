@@ -3,9 +3,9 @@
 	This config file defines snippets for CQL queries.
 
 	The <template> must contain information about FHIR libraries and a variable {0} where the context (Specimen, Patient) will be inserted as well as a variable {1} where codesystems are inserted.
-    For fields (depending on entity type) which need a singleton statement the variable {2} defines the place where all singleton statements are inserted.
+    For fields (depending on entity type) which need a singleton statement the variable {2} defines the place where all singleton expression are inserted.
     The predicate {3} is the actual predicate expression for the expression named "InInitialPopulation". That expression defines the inclusion criteria for the population of interest.
-    The stratifier statements {4} have to be one or multiple statements which define named expressions. The syntax is:
+    The stratifier expression {4} have to be one or multiple expression which define named expressions. The syntax is:
 
     define <name>:
       <expression>
@@ -15,16 +15,16 @@
     Variable binding:
         {0}     context (Specimen, Patient)
         {1}     codesystem definitions
-        {2}     singleton statements
+        {2}     singleton expression
         {3}     predicate
-        {4}     stratifier statements
+        {4}     stratifier expression
 
 	The <pathCqlExpression> represents the path starting at the resource corresponding to the context ending with the field in the FHIR resource corresponding to the UI field.
     Variable binding:
 	    {0}     atomic expressions will be inserted here.
 
 	Every atomic expression <atomicExpression> represents one condition for a field given by an operator and one or two values.
-	It will be choosen dependent on the <operator>. If no operator-specific snippet is provided the connector will use the snippet
+	It will be chosen dependent on the <operator>. If no operator-specific snippet is provided the connector will use the snippet
 	defined for <operator>DEFAULT</operator>.
 	Variable binding:
 	    {0}     operator
@@ -163,90 +163,6 @@
     <extensionUrl/>
     <mdrUrn>urn:mdr16:dataelement:15:1</mdrUrn>
     <permittedValue>
-      <cqlValue>whole-blood</cqlValue>
-      <mdrKey>whole_blood-EDTA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>whole-blood</cqlValue>
-      <mdrKey>whole_blood_stabilised</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>blood-edta</cqlValue>
-      <mdrKey>plasma-EDTA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>blood-citrate</cqlValue>
-      <mdrKey>plasma-citrate</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>blood-plasma</cqlValue>
-      <mdrKey>plasma_stabilised</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>blood-serum</cqlValue>
-      <mdrKey>serum</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>peripheral-blood-cells-vital</cqlValue>
-      <mdrKey>peripheral_blood_cells</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>bone-marrow</cqlValue>
-      <mdrKey>bone_marrow</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>csf-liquor</cqlValue>
-      <mdrKey>liquor/CSF</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>ascites</cqlValue>
-      <mdrKey>ascites</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>saliva</cqlValue>
-      <mdrKey>saliva</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>urine</cqlValue>
-      <mdrKey>urine_spontaneous</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>urine</cqlValue>
-      <mdrKey>urine_cumulative</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>stool-faeces</cqlValue>
-      <mdrKey>faeces</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>dna</cqlValue>
-      <mdrKey>DNA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>g-dna</cqlValue>
-      <mdrKey>DNA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>cf-dna</cqlValue>
-      <mdrKey>cfDNA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>rna</cqlValue>
-      <mdrKey>RNA</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>liquid-other</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>buffy-coat</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>derivative-other</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
       <cqlValue>tissue-formalin</cqlValue>
       <mdrKey>tissue_formalin</mdrKey>
     </permittedValue>
@@ -289,26 +205,6 @@
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
       <mdrKey>tissue_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
-      <mdrKey>dried-whole-blood</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-heparin</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-cell-free</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
-      <mdrKey>swab</mdrKey>
     </permittedValue>
   </uiField>
 
@@ -425,50 +321,6 @@
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
       <mdrKey>liquid_biosamples_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tissue-formalin</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tumor-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>normal-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>other-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tumor-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>normal-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>other-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tissue-paxgene-or-else</cqlValue>
-      <mdrKey>tissue_PAX_or_similar</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>tissue-other</cqlValue>
-      <mdrKey>tissue_other</mdrKey>
-    </permittedValue>
-    <permittedValue>
-      <cqlValue>derivative-other</cqlValue>
-      <mdrKey>tissue_other</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>liquid_biosamples_other</cqlValue>
