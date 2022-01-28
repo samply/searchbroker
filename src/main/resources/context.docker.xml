@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: Check if DEPLOYMENT_CONTEXT works here -->
 <Context path="/broker">
   <Resource auth="Container"
     driverClassName="org.postgresql.Driver"
@@ -7,12 +8,12 @@
     maxTotal="100"
     maxWaitMillis="30000"
     name="jdbc/postgres/samply.share.broker"
-    password="{postgres-pass}"
+    password="SEARCHBROKER_POSTGRES_PASS"
     removeAbandonedOnBorrow="true"
     removeAbandonedTimeout="120"
     testOnBorrow="true"
     type="javax.sql.DataSource"
-    url="jdbc:postgresql://{postgres-host}:{postgres-port}/{postgres-db}"
-    username="{postgres-user}"
+    url="jdbc:postgresql://SEARCHBROKER_POSTGRES_HOST:SEARCHBROKER_POSTGRES_PORT/SEARCHBROKER_POSTGRES_DB"
+    username="SEARCHBROKER_POSTGRES_USER"
     validationQuery="select 1"/>
 </Context>

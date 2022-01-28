@@ -6,7 +6,7 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="{level}">
+    <Root level="LOG_LEVEL">
       <AppenderRef ref="CONSOLE"/>
     </Root>
   </Loggers>

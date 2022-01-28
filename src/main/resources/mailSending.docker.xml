@@ -2,10 +2,10 @@
 <p:mailSending xmlns:p="http://schema.samply.de/config/MailSending"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://schema.samply.de/config/MailSending mailSending.xsd ">
-  <p:fromAddress>{mail-from-address}</p:fromAddress>
-  <p:fromName>{mail-from-name}</p:fromName>
-  <p:host>{mail-host}</p:host>
-  <p:port>{mail-port}</p:port>
-  <p:protocol>{mail-protocol}</p:protocol>
+  <p:fromAddress>SEARCHBROKER_MAIL_FROM_ADDRESS</p:fromAddress>
+  <p:fromName>SEARCHBROKER_MAIL_FROM_NAME</p:fromName>
+  <p:host>SEARCHBROKER_MAIL_HOST</p:host>
+  <p:port>SEARCHBROKER_MAIL_PORT</p:port>
+  <p:protocol>SEARCHBROKER_MAIL_PROTOCOL</p:protocol>
   <p:templateFolder>/WEB-INF/classes/mailTemplates/</p:templateFolder>
 </p:mailSending>

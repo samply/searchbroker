@@ -5,12 +5,12 @@
   <Proxy>
     <HTTP>
       <Password/>
-      <Url>{proxy-host}:{proxy-port}</Url>
+      <Url>HTTP_PROXY_HOST:HTTP_PROXY_PORT</Url>
       <Username/>
     </HTTP>
     <HTTPS>
       <Password/>
-      <Url>{proxy-host}:{proxy-port}</Url>
+      <Url>HTTPS_PROXY_HOST:HTTPS_PROXY_PORT</Url>
       <Username/>
     </HTTPS>
     <NoProxyHosts>

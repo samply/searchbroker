@@ -2,10 +2,10 @@
 <p:oAuth2Client xmlns:p="http://schema.samply.de/config/OAuth2Client"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://schema.samply.de/config/OAuth2Client http://schema.samply.de/config/OAuth2Client.xsd">
-  <p:clientId>{auth-client-id}</p:clientId>
-  <p:clientSecret></p:clientSecret>
-  <p:host>{auth-host}</p:host>
+  <p:clientId>SEARCHBROKER_AUTH_CLIENT_ID</p:clientId>
+  <p:clientSecret>SEARCHBROKER_AUTH_CLIENT_SECRET</p:clientSecret>
+  <p:host>SEARCHBROKER_AUTH_HOST</p:host>
   <p:hostPublicKey>
-    {auth-public-key}
+    SEARCHBROKER_AUTH_PUBLIC_KEY
   </p:hostPublicKey>
 </p:oAuth2Client>
