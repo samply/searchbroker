@@ -60,9 +60,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.UriBuilder;
@@ -80,9 +78,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
-import org.jooq.tools.json.JSONObject;
-import org.jooq.tools.json.JSONParser;
-import org.jooq.tools.json.ParseException;
 
 /**
  * The Class InquiryHandler.
@@ -122,7 +117,7 @@ public class InquiryHandler {
    * @param voteId             the id of the vote linked with this inquiry
    * @param resultTypes        list of the entities that are searched for
    * @param bypassExamination  if true, no check by the ccp office is required
-   * @param isMonitoring  if true, no creation of cql query
+   * @param isMonitoring       if true, no creation of cql query
    * @return the id of the inquiry
    */
   public int storeAndRelease(String simpleQueryDtoJson, int userid, String inquiryName,
@@ -163,14 +158,14 @@ public class InquiryHandler {
   /**
    * Store a new inquiry draft.
    *
-   * @param query      the query criteria of the inquiry
-   * @param userid                  the id of the user that releases the inquiry
-   * @param inquiryName             the label of the inquiry
-   * @param inquiryDescription      the description of the inquiry
-   * @param exposeId                the id of the expose linked with this inquiry
-   * @param voteId                  the id of the vote linked with this inquiry
-   * @param resultTypes             list of the entities that are searched for
-   * @param isMonitoring  if true, no creation of cql query
+   * @param query              the query criteria of the inquiry
+   * @param userid             the id of the user that releases the inquiry
+   * @param inquiryName        the label of the inquiry
+   * @param inquiryDescription the description of the inquiry
+   * @param exposeId           the id of the expose linked with this inquiry
+   * @param voteId             the id of the vote linked with this inquiry
+   * @param resultTypes        list of the entities that are searched for
+   * @param isMonitoring       if true, no creation of cql query
    * @return the id of the inquiry draft
    */
   private int store(String query, int userid, String inquiryName,
@@ -397,9 +392,9 @@ public class InquiryHandler {
   }
 
   /**
-   * Creates a new tentative inquiry.
-   * Tentative inquiries are those that are submitted by the central search tool. They will be
-   * purged after a short period of time if no action by the user is taken.
+   * Creates a new tentative inquiry. Tentative inquiries are those that are submitted by the
+   * central search tool. They will be purged after a short period of time if no action by the user
+   * is taken.
    *
    * @param query  the query criteria
    * @param userid the id of the user that cretaed the inquiry
@@ -464,8 +459,8 @@ public class InquiryHandler {
       if (documentData != null) {
         Path path = documentData.toPath();
         Record documentRecord = dslContext.insertInto(Tables.DOCUMENT, Tables.DOCUMENT.DATA,
-            Tables.DOCUMENT.FILENAME, Tables.DOCUMENT.FILETYPE, Tables.DOCUMENT.PROJECT_ID,
-            Tables.DOCUMENT.INQUIRY_ID, Tables.DOCUMENT.USER_ID, Tables.DOCUMENT.DOCUMENT_TYPE)
+                Tables.DOCUMENT.FILENAME, Tables.DOCUMENT.FILETYPE, Tables.DOCUMENT.PROJECT_ID,
+                Tables.DOCUMENT.INQUIRY_ID, Tables.DOCUMENT.USER_ID, Tables.DOCUMENT.DOCUMENT_TYPE)
             .values(Files.readAllBytes(path),
                 documentFilename, documentFiletype, projectId,
                 inquiryId, userId, documentType).returning(Tables.DOCUMENT.ID).fetchOne();
@@ -500,7 +495,7 @@ public class InquiryHandler {
 
       for (String site : siteIds) {
         dslContext.insertInto(Tables.INQUIRY_SITE, Tables.INQUIRY_SITE.INQUIRY_ID,
-            Tables.INQUIRY_SITE.SITE_ID)
+                Tables.INQUIRY_SITE.SITE_ID)
             .values(inquiryId, Integer.parseInt(site)).execute();
       }
 
@@ -511,68 +506,52 @@ public class InquiryHandler {
     return ret;
   }
 
-  // TODO: bankId parameter is currently basically useless - may change with access restrictions
-
   /**
-   * List all (non-tentative) inquiries.
-   * Tentative inquiries are identified by a revision nr of 0.
+   * List all (non-tentative) inquiries. Tentative inquiries are identified by a revision nr of 0.
    *
    * @param bankId the id of the bank that wants to list the inquiries
    * @return the serialized list of inquiry ids
    */
   protected String list(int bankId) {
-    List<Inquiry> inquiryList;
     InquiriesIdList inquiriesIdList = new InquiriesIdList();
 
-    try {
-      BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(bankId);
-      if (bankSite == null) {
-        logger.warn(
-            "No Bank site for bank id '" + bankId + "' is found. Not providing any inquiries.");
-        return writeXml(inquiriesIdList);
-      }
-
-      Site site = SiteUtil.fetchSiteById(bankSite.getSiteId());
-      Integer siteIdForBank = site.getId();
-
-      if (siteIdForBank == null || siteIdForBank < 1) {
-        logger.warn(
-            "Bank " + bankId + " is not associated with a site. Not providing any inquiries.");
-        return writeXml(inquiriesIdList);
-      }
-
-      if (!bankSite.getApproved()) {
-        logger.warn("Bank " + bankId
-            + " is associated with a site, but that association has not been approved. "
-            + "Not providing any inquiries.");
-        return writeXml(inquiriesIdList);
-      }
-
-      inquiryList = InquiryUtil.fetchInquiriesForSite(siteIdForBank);
-
-      for (Inquiry inquiry : inquiryList) {
-        if ((inquiry.getRevision() < 1)) {
-          continue;
-        }
-
-        InquiriesIdList.InquiryId inquiryXml = new InquiriesIdList.InquiryId();
-        inquiriesIdList.getInquiryIds().add(inquiryXml);
-
-        inquiryXml.setId(Integer.toString(inquiry.getId()));
-        if (inquiry.getRevision() != null) {
-          inquiryXml.setRevision(Integer.toString(inquiry.getRevision()));
-        } else {
-          inquiryXml.setRevision("1");
-        }
-      }
-    } catch (NullPointerException npe) {
+    BankSite bankSite = BankSiteUtil.fetchBankSiteByBankId(bankId);
+    if (bankSite == null) {
       logger.warn(
-          "Nullpointer exception caught while trying to list inquiries. This might be caused by a"
-              + " missing connection between bank and site. Check the DB. Returning empty list for"
-              + " now.");
-      inquiriesIdList.setInquiryIds(new ArrayList<>());
-
+          "No Bank site for bank id '" + bankId + "' is found. Not providing any inquiries.");
       return writeXml(inquiriesIdList);
+    }
+
+    Site site = SiteUtil.fetchSiteById(bankSite.getSiteId());
+    Integer siteIdForBank = site.getId();
+
+    if (siteIdForBank == null || siteIdForBank < 1) {
+      logger.warn(
+          "Bank " + bankId + " is not associated with a site. Not providing any inquiries.");
+      return writeXml(inquiriesIdList);
+    }
+
+    if (!bankSite.getApproved()) {
+      logger.warn("Bank " + bankId
+          + " is associated with a site, but that association has not been approved. "
+          + "Not providing any inquiries.");
+      return writeXml(inquiriesIdList);
+    }
+
+    for (Inquiry inquiry : InquiryUtil.fetchInquiriesForSite(siteIdForBank)) {
+      if (inquiry.getRevision() == null || inquiry.getRevision() < 1) {
+        continue;
+      }
+
+      InquiriesIdList.InquiryId inquiryXml = new InquiriesIdList.InquiryId();
+      inquiriesIdList.getInquiryIds().add(inquiryXml);
+
+      inquiryXml.setId(Integer.toString(inquiry.getId()));
+      if (inquiry.getRevision() != null) {
+        inquiryXml.setRevision(Integer.toString(inquiry.getRevision()));
+      } else {
+        inquiryXml.setRevision("1");
+      }
     }
 
     return writeXml(inquiriesIdList);
@@ -1112,7 +1091,7 @@ public class InquiryHandler {
   private boolean isEmpty(EssentialSimpleValueDto valueDto) {
     return isEmptyValue(valueDto.getValue())
         || (valueDto.getCondition() == SimpleValueCondition.BETWEEN && isEmptyValue(
-            valueDto.getMaxValue()));
+        valueDto.getMaxValue()));
   }
 
   private boolean isEmpty(EssentialSimpleFieldDto fieldDto) {
