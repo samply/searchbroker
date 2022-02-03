@@ -93,7 +93,7 @@
     <commons-lang3.version>3.7</commons-lang3.version>
     <jsf-api.version>2.2.15</jsf-api.version>
     <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-    <postgresql.version>42.2.19</postgresql.version>
+    <postgresql.version>42.2.25</postgresql.version>
     <commons-io.version>2.6</commons-io.version>
     <guava.version>24.0-jre</guava.version>
     <swagger-ui.version>3.25.0</swagger-ui.version>
