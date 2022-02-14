@@ -168,14 +168,18 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>whole-blood</cqlValue>
+      <mdrKey>whole_blood</mdrKey>
+    </permittedValue>
+    <permittedValue>
+      <cqlValue>whole-blood</cqlValue>
       <mdrKey>whole_blood_stabilised</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>blood-edta</cqlValue>
+      <cqlValue>plasma-edta</cqlValue>
       <mdrKey>plasma-EDTA</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>blood-citrate</cqlValue>
+      <cqlValue>plasma-citrat</cqlValue>
       <mdrKey>plasma-citrate</mdrKey>
     </permittedValue>
     <permittedValue>
@@ -224,7 +228,7 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>g-dna</cqlValue>
-      <mdrKey>DNA</mdrKey>
+      <mdrKey>g_dna</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>cf-dna</cqlValue>
@@ -240,27 +244,31 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>buffy-coat</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
+      <mdrKey>buffy_coat</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
+      <mdrKey>derivative_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>tissue-formalin</cqlValue>
+      <cqlValue>tissue-ffpe</cqlValue>
       <mdrKey>tissue_formalin</mdrKey>
+    </permittedValue>
+    <permittedValue>
+      <cqlValue>tissue-ffpe</cqlValue>
+      <mdrKey>tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>tumor-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>tumor_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>normal-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>normal_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>other-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>other_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>tissue-frozen</cqlValue>
@@ -268,18 +276,18 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>tumor-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>tumor_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>normal-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>normal_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>other-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>other_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>tissue-paxgene-or-else</cqlValue>
+      <cqlValue>tissue-other</cqlValue>
       <mdrKey>tissue_PAX_or_similar</mdrKey>
     </permittedValue>
     <permittedValue>
@@ -288,26 +296,26 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
-      <mdrKey>tissue_other</mdrKey>
+      <mdrKey>derivative_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
-      <mdrKey>dried-whole-blood</mdrKey>
+      <cqlValue>dried-whole-blood</cqlValue>
+      <mdrKey>dried_whole_blood</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-heparin</mdrKey>
+      <cqlValue>plasma-heparin</cqlValue>
+      <mdrKey>plasma_heparin</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-cell-free</mdrKey>
+      <cqlValue>plasma-cell-free</cqlValue>
+      <mdrKey>plasma_cell_free</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-other</mdrKey>
+      <cqlValue>plasma-other</cqlValue>
+      <mdrKey>plasma_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
+      <cqlValue>swab</cqlValue>
       <mdrKey>swab</mdrKey>
     </permittedValue>
   </uiField>
@@ -348,19 +356,27 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>whole-blood</cqlValue>
+      <mdrKey>whole_blood</mdrKey>
+    </permittedValue>
+    <permittedValue>
+      <cqlValue>whole-blood</cqlValue>
       <mdrKey>whole_blood_stabilised</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>blood-edta</cqlValue>
+      <cqlValue>plasma-edta</cqlValue>
       <mdrKey>plasma-EDTA</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>blood-citrate</cqlValue>
+      <cqlValue>plasma-citrat</cqlValue>
       <mdrKey>plasma-citrate</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>blood-plasma</cqlValue>
       <mdrKey>plasma_stabilised</mdrKey>
+    </permittedValue>
+    <permittedValue>
+      <cqlValue>blood-plasma</cqlValue>
+      <mdrKey>blood_plasma</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>blood-serum</cqlValue>
@@ -404,7 +420,7 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>g-dna</cqlValue>
-      <mdrKey>DNA</mdrKey>
+      <mdrKey>g_dna</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>cf-dna</cqlValue>
@@ -420,27 +436,31 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>buffy-coat</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
+      <mdrKey>buffy_coat</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
-      <mdrKey>liquid_biosamples_other</mdrKey>
+      <mdrKey>derivative_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>tissue-formalin</cqlValue>
+      <cqlValue>tissue-ffpe</cqlValue>
       <mdrKey>tissue_formalin</mdrKey>
+    </permittedValue>
+    <permittedValue>
+      <cqlValue>tissue-ffpe</cqlValue>
+      <mdrKey>tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>tumor-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>tumor_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>normal-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>normal_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>other-tissue-ffpe</cqlValue>
-      <mdrKey>tissue_formalin</mdrKey>
+      <mdrKey>other_tissue_ffpe</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>tissue-frozen</cqlValue>
@@ -448,18 +468,18 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>tumor-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>tumor_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>normal-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>normal_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
       <cqlValue>other-tissue-frozen</cqlValue>
-      <mdrKey>tissue_frozen</mdrKey>
+      <mdrKey>other_tissue_frozen</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>tissue-paxgene-or-else</cqlValue>
+      <cqlValue>tissue-other</cqlValue>
       <mdrKey>tissue_PAX_or_similar</mdrKey>
     </permittedValue>
     <permittedValue>
@@ -468,26 +488,26 @@
     </permittedValue>
     <permittedValue>
       <cqlValue>derivative-other</cqlValue>
-      <mdrKey>tissue_other</mdrKey>
+      <mdrKey>derivative_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
-      <mdrKey>dried-whole-blood</mdrKey>
+      <cqlValue>dried-whole-blood</cqlValue>
+      <mdrKey>dried_whole_blood</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-heparin</mdrKey>
+      <cqlValue>plasma-heparin</cqlValue>
+      <mdrKey>plasma_heparin</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-cell-free</mdrKey>
+      <cqlValue>plasma-cell-free</cqlValue>
+      <mdrKey>plasma_cell_free</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>plasma_stabilised</cqlValue>
-      <mdrKey>plasma-other</mdrKey>
+      <cqlValue>plasma-other</cqlValue>
+      <mdrKey>plasma_other</mdrKey>
     </permittedValue>
     <permittedValue>
-      <cqlValue>liquid_biosamples_other</cqlValue>
+      <cqlValue>swab</cqlValue>
       <mdrKey>swab</mdrKey>
     </permittedValue>
   </uiField>
