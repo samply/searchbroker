@@ -90,14 +90,14 @@
         <commons-lang3.version>3.7</commons-lang3.version>
         <jsf-api.version>2.2.15</jsf-api.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-        <postgresql.version>42.2.19</postgresql.version>
+        <postgresql.version>42.3.3</postgresql.version>
         <commons-io.version>2.6</commons-io.version>
         <guava.version>24.0-jre</guava.version>
         <swagger-ui.version>3.25.0</swagger-ui.version>
         <poi-ooxml.version>3.17</poi-ooxml.version>
         <easymock.version>4.0.2</easymock.version>
         <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
-        <version.jersey>2.26</version.jersey>
+        <version.jersey>3.0.4</version.jersey>
         <junit-jupiter.version>5.1.0</junit-jupiter.version>
         <junit-platform-launcher.version>1.1.0</junit-platform-launcher.version>
         <togglz-core.version>2.6.1.Final</togglz-core.version>
