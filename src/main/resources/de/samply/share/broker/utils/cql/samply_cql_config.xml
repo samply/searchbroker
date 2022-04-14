@@ -690,13 +690,13 @@
     </codesystem>
     <entityType>
       <atomicExpression>
-      <atomicCqlExpression>( (not Matches(''{2}'',''\\w\\d+'') and exists
+      <atomicCqlExpression>( (not (Matches(''{2}'',''\\w\\d+'') and exists
           from [Condition] C
           where exists
           from C.code.coding CD
-          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0'') )
+          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0'')))
           and not exists([Condition: Code ''{2}'' from icd10]) and not
-          exists([Condition: Code ''{2}'' from icd10gm]))
+          exists([Condition: Code ''{2}'' from icd10gm]) )
         </atomicCqlExpression>
         <operator>&lt;&gt;</operator>
       </atomicExpression>
@@ -705,9 +705,9 @@
           from [Condition] C
           where exists
           from C.code.coding CD
-          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0'') )
+          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0''))
           or exists([Condition: Code ''{2}'' from icd10]) or exists([Condition:
-          Code ''{2}'' from icd10gm]))
+          Code ''{2}'' from icd10gm]) )
         </atomicCqlExpression>
         <operator>DEFAULT</operator>
       </atomicExpression>
@@ -716,13 +716,21 @@
     </entityType>
     <entityType>
       <atomicExpression>
-        <atomicCqlExpression>(not exists([Patient -&gt; Condition: Code ''{2}'' from icd10]) and not
-          exists([Patient -&gt; Condition: Code ''{2}'' from icd10gm]))
+        <atomicCqlExpression>( (not (Matches(''{2}'',''\\w\\d+'') and
+          exists from [Patient -> Condition] C
+          where exists from C.code.coding CD
+          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0'')))
+          and not exists([Patient -&gt; Condition: Code ''{2}'' from icd10]) and not
+          exists([Patient -&gt; Condition: Code ''{2}'' from icd10gm]) )
         </atomicCqlExpression>
         <operator>&lt;&gt;</operator>
       </atomicExpression>
       <atomicExpression>
-        <atomicCqlExpression>(exists([Patient -&gt; Condition: Code ''{2}'' from icd10]) or
+        <atomicCqlExpression>( (Matches(''{2}'',''\\w\\d+'') and
+          exists from [Patient -> Condition] C
+          where exists from C.code.coding CD
+          where StartsWith(CD.code,''{2}'') and (CD.system = ''http://hl7.org/fhir/sid/icd-10'' or CD.system = ''http://fhir.de/CodeSystem/dimdi/icd-10-gm0''))
+          or exists([Patient -&gt; Condition: Code ''{2}'' from icd10]) or
           exists([Patient -&gt; Condition: Code ''{2}'' from icd10gm]))
         </atomicCqlExpression>
         <operator>DEFAULT</operator>
