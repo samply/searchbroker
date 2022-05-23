@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.6.0 - 2022-05-23]
+### Changed
+- do not send host is alive check to icinga
+
 ## [8.4.3 - 2022-02-17]
 ### Changed
 - MDR mappings expanded to cover all MIABIS sample types ([SampleMaterialType](https://samply.github.io/bbmri-fhir-ig/ValueSet-SampleMaterialType.html))
