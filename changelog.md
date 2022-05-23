@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.4.3 - 2022-02-17]
+### Changed
+- MDR mappings expanded to cover all MIABIS sample types ([SampleMaterialType](https://samply.github.io/bbmri-fhir-ig/ValueSet-SampleMaterialType.html))
+- Map legacy sample types onto something meaningful, to provide backward compatibility for older versions of the MDR.
+
 ## [8.4.2 - 2021-12-16]
 ### Security
 - Update Log4J to v2.16.0 ([#29](https://github.com/samply/searchbroker/pull/29))
