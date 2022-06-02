@@ -36,10 +36,7 @@ import org.jooq.impl.DefaultConfiguration;
 // TODO: make everything static here?
 public class BankRegistration {
 
-  /**
-   * The log4j logger.
-   */
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private static final Logger logger = LogManager.getLogger(BankRegistration.class);
 
   /**
    * Instantiates a new bank registration object.

@@ -43,9 +43,7 @@ public class CentralSearchPlug {
 
   private static final Logger logger = LogManager.getLogger(CentralSearchPlug.class);
 
-  private final String serverHeaderKey = "Server";
-
-  private final String serverHeaderValue =
+  private static final String SERVER_HEADER_VALUE =
       "Samply.Share.Broker/" + ProjectInfo.INSTANCE.getVersionString();
 
   @Context
@@ -132,7 +130,8 @@ public class CentralSearchPlug {
     UriBuilder ub = uriInfo.getAbsolutePathBuilder();
     String baseUri = uriInfo.getBaseUri().getPath().replace("rest/", "editInquiry.xhtml");
     URI uri = ub.replacePath(baseUri).queryParam("inquiryId", inquiryIdS).build();
+    String serverHeaderKey = "Server";
     return Response.status(Response.Status.CREATED).location(uri)
-        .header(serverHeaderKey, serverHeaderValue).build();
+        .header(serverHeaderKey, SERVER_HEADER_VALUE).build();
   }
 }

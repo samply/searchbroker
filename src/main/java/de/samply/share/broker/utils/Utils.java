@@ -57,8 +57,8 @@ import org.jooq.Record;
  */
 public class Utils {
 
-  public static final String USER_AGENT = "http.useragent";
   private static final Logger logger = LogManager.getLogger(Utils.class);
+
   private static final String PROXY_REALM = "proxy.realm";
   private static final String PROXY_HTTPS_PASSWORD = "proxy.https.password";
   private static final String PROXY_HTTPS_USERNAME = "proxy.https.username";

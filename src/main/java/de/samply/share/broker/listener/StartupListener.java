@@ -31,11 +31,9 @@ import org.quartz.impl.StdSchedulerFactory;
  */
 public class StartupListener implements javax.servlet.ServletContextListener {
 
-  /**
-   * The Constant logger.
-   */
   private static final Logger LOGGER = LogManager.getLogger(StartupListener.class);
-  private SchedulerFactory sf = new StdSchedulerFactory();
+
+  private final SchedulerFactory sf = new StdSchedulerFactory();
 
   /* (non-Javadoc)
    * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
