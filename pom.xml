@@ -82,7 +82,7 @@
     <jcifs.version>1.3.17</jcifs.version>
     <jackson-core-asl.version>1.9.13</jackson-core-asl.version>
     <itextpdf.version>5.5.13</itextpdf.version>
-    <bcprov-jdk15on.version>1.59</bcprov-jdk15on.version>
+    <bcprov-jdk15on.version>1.69</bcprov-jdk15on.version>
     <quartz.version>2.3.0</quartz.version>
     <javaee-api.version>8.0</javaee-api.version>
     <weld.version>2.4.8.Final</weld.version>
