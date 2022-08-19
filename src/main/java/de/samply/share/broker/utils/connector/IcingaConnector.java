@@ -142,19 +142,17 @@ public class IcingaConnector {
       boolean isRetry) throws IcingaConnectorException {
     try {
       HttpPost httpPost;
-      if (statusReportItem.getParameterName().equals("host")) {
-        httpPost = createPostHost(sitename);
-      } else {
+      if (!statusReportItem.getParameterName().equals("host")) {
         httpPost = createPost(sitename, statusReportItem.getParameterName()
             + "-" + project);
-      }
-      IcingaReportItem icingaReportItem = new IcingaReportItem();
-      icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
-      icingaReportItem.setPluginOutput(statusReportItem.getStatusText());
-      httpPost.setEntity(new StringEntity(gson.toJson(icingaReportItem), Consts.UTF_8));
+        IcingaReportItem icingaReportItem = new IcingaReportItem();
+        icingaReportItem.setExitStatus(statusReportItem.getExitStatus());
+        icingaReportItem.setPluginOutput(statusReportItem.getStatusText());
+        httpPost.setEntity(new StringEntity(gson.toJson(icingaReportItem), Consts.UTF_8));
 
-      CloseableHttpResponse response = httpClient.execute(httpPost, context);
-      EntityUtils.consume(response.getEntity());
+        CloseableHttpResponse response = httpClient.execute(httpPost, context);
+        EntityUtils.consume(response.getEntity());
+      }
     } catch (NoHttpResponseException nhre) {
       if (!isRetry) {
         try {
@@ -239,9 +237,9 @@ public class IcingaConnector {
   }
 
   /**
-   * Create an apache http post object for the given site and parameter.
-   * If we use "addParameter" instead of "setCustomQuery" in URIBuilder, all spaces will be replaced
-   * with "+" instead of "%20". This will cause icinga to not recognize the call.
+   * Create an apache http post object for the given site and parameter. If we use "addParameter"
+   * instead of "setCustomQuery" in URIBuilder, all spaces will be replaced with "+" instead of
+   * "%20". This will cause icinga to not recognize the call.
    *
    * @param sitename    the site (or "host" in icinga)
    * @param servicename the service name

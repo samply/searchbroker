@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [8.5.0 - ]
+## [8.6.0 - 2022-08-19]
+### Added
+- CQL query for multiple collectionIds in an identifier
+
+### Fixed
+- Icinga host check no longer triggered by Searchbroker
+
+## [8.5.0 - 2022-05-02]
 ### Added
 - Save "Structured-Query"
 ### Changed
