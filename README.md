@@ -288,20 +288,11 @@ WantedBy=multi-user.target
 
 ​		And check service (one per app/tomcat): http://www.ansoncheunghk.info/article/5-steps-install-multiple-apache-tomcat-instance-windows
 
-
-## License
-        
- Copyright 2020 The Samply Development Community
-        
- Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-        
- http://www.apache.org/licenses/LICENSE-2.0
-        
- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
 ## Customization
 
 ### Adding new search terms
+
+#### Using CQL to build queries
 
 The Searchbroker uses CQL to communicate with the Bridgeheads. CQL is a HL7 language that (amongst other things) allows very efficient FHIR queries to be constructed.
 
@@ -318,6 +309,8 @@ These key-value pairs are used to create CQL queries via templates, found in:
         src/main/resources/de/samply/share/broker/utils/cql/samply_cql_config.xml
 
 E.g.if you search in this file for the key "urn:mdr16:dataelement:27:1", you will find the template for the ICD 10 search.
+
+#### Adding your own search term
 
 If you wish to add new terms to your search, you will need to make changes in several locations:
 
@@ -365,4 +358,26 @@ For example, let us assume you want to add the Orphanet code (rare diseases) to 
         </uiField>
 
 If you compare this with the ICD 10 CQL, you will see it is very similar. The "mdrUrn" field has been filled with the key, which should match with the Orpha key sent by the Sample Locator. The value (Orpha code) is supplied by the Sample Locator via the the variable "{2}". Everything else gets sent to the Bridgehead "as is".
+
+#### Building
+
+Once you have made your changes to the Searchbroker source code, you will need to rebuild the Docker image.
+
+Start with Maven:
+
+        mvn clean flyway:clean flyway:migrate jooq-codegen:generate install -Psamply -Dcheckstyle.skip
+
+And now rebuild the Docker image, e.g.:
+
+        docker build . -t searchbroker:latest --no-cache
+
+## License
+        
+ Copyright 2020 The Samply Development Community
+        
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+        
+ http://www.apache.org/licenses/LICENSE-2.0
+        
+ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
