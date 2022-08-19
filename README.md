@@ -298,3 +298,71 @@ WantedBy=multi-user.target
  http://www.apache.org/licenses/LICENSE-2.0
         
  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+## Customization
+
+### Adding new search terms
+
+The Searchbroker uses CQL to communicate with the Bridgeheads. CQL is a HL7 language that (amongst other things) allows very efficient FHIR queries to be constructed.
+
+These queries are built up as a result of requests from the Sample Locator. A request will, in the simplest case, comprise of a MDR URN as key, plus one or more parameters.
+
+For example, the request "give me all patients and all samples associated with the ICD 10 diagnosis Z09.3" would look something like this:
+
+        Key: urn:mdr16:dataelement:27:1 Values: [Z09.3]
+
+The fact that the key comes from the MDR is not really important from the point of view of the Searchbroker, it just needs to be unique.
+
+These key-value pairs are used to create CQL queries via templates, found in:
+
+        src/main/resources/de/samply/share/broker/utils/cql/samply_cql_config.xml
+
+E.g.if you search in this file for the key "urn:mdr16:dataelement:27:1", you will find the template for the ICD 10 search.
+
+If you wish to add new terms to your search, you will need to make changes in several locations:
+
+* The MDR.
+* The Sample Locator GUI (possibly).
+* Here, in the Searchbroker CQL.
+
+For example, let us assume you want to add the Orphanet code (rare diseases) to your allowed diagnoses. Then you might want to add the following CQL template to the file samply_cql_config.xml:
+
+        <!-- Diagnosis Orphanet -->
+        <uiField>
+          <mdrUrn>urn:mdr16:dataelement:36:1</mdrUrn>
+          <codesystem>
+            <name>orpha</name>
+            <url>http://www.orpha.net</url>
+          </codesystem>
+          <extensionUrl/>
+          <entityType>
+            <entityTypeName>Patient</entityTypeName>
+            <pathCqlExpression>{0}</pathCqlExpression>
+            <atomicExpression>
+              <operator>&lt;&gt;</operator>
+              <atomicCqlExpression>(not exists([Condition: Code ''{2}'' from orpha]))</atomicCqlExpression>
+            </atomicExpression>
+            <atomicExpression>
+              <operator>DEFAULT</operator>
+              <atomicCqlExpression>(exists([Condition: Code ''{2}'' from orpha]))</atomicCqlExpression>
+            </atomicExpression>
+          </entityType>
+          <entityType>
+            <entityTypeName>Specimen</entityTypeName>
+            <singleton>
+              <name>Patient</name>
+            </singleton>
+            <pathCqlExpression>{0}</pathCqlExpression>
+            <atomicExpression>
+              <operator>&lt;&gt;</operator>
+              <atomicCqlExpression>(not exists([Patient -&gt; Condition: Code ''{2}'' from orpha]))</atomicCqlExpression>
+            </atomicExpression>
+            <atomicExpression>
+              <operator>DEFAULT</operator>
+              <atomicCqlExpression>(exists([Patient -&gt; Condition: Code ''{2}'' from orpha]))</atomicCqlExpression>
+            </atomicExpression>
+          </entityType>
+        </uiField>
+
+If you compare this with the ICD 10 CQL, you will see it is very similar. The "mdrUrn" field has been filled with the key, which should match with the Orpha key sent by the Sample Locator. The value (Orpha code) is supplied by the Sample Locator via the the variable "{2}". Everything else gets sent to the Bridgehead "as is".
+
