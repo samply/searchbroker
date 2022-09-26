@@ -390,7 +390,7 @@
     <weld.version>2.4.8.Final</weld.version>
     <cdi.version>1.2</cdi.version>
     <jsf-api.version>2.2.20</jsf-api.version>
-    <microprofile-openapi-api.version>2.0-MR1</microprofile-openapi-api.version>
+    <microprofile-openapi-api.version>3.0</microprofile-openapi-api.version>
     <geronimo-openapi-maven-plugin.version>1.0.12</geronimo-openapi-maven-plugin.version>
     <log4j.version>2.19.0</log4j.version>
     <mockito.version>4.8.0</mockito.version>
