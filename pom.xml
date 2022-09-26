@@ -404,7 +404,7 @@
     <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
     <version.jersey>2.31</version.jersey>
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
-    <junit-platform-launcher.version>1.8.2</junit-platform-launcher.version>
+    <junit-platform-launcher.version>1.9.1</junit-platform-launcher.version>
     <togglz-core.version>2.6.1.Final</togglz-core.version>
     <version.gson>2.9.0</version.gson>
   </properties>
