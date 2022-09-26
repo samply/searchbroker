@@ -360,7 +360,7 @@
 
   <properties>
     <!-- Samply dependencies -->
-    <version.samply.common.config>5.1.0</version.samply.common.config>
+    <version.samply.common.config>5.2.0</version.samply.common.config>
     <common-mailing.version>3.0.0</common-mailing.version>
     <common-http.version>7.3.0</common-http.version>
     <jsf-renderer.version>2.0.0</jsf-renderer.version>
