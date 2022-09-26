@@ -86,7 +86,12 @@ public class EssentialSimpleQueryDto2CqlTransformer {
             + "      })\n"
             + "    then 'tissue'\n"
             + "    else 'other'\n"
-            + "  end";
+            + "  end"
+            + "\n"
+            + "define Custodian:\n"
+            + "First(from Specimen.extension E\n"
+            +  "where E.url = 'https://fhir.bbmri.de/StructureDefinition/Custodian'\n"
+            +     "return (E.value as Reference).identifier.value)";
       default:
         return "";
     }

@@ -68,6 +68,25 @@ public class InquiryCriteriaUtil {
   }
 
   /**
+   * Get the inquiry criteria with the typ structured query by inquiry id.
+   *
+   * @param inquiryId the inquiry id
+   * @return inquiry criteria with typ structured query
+   */
+  public static String fetchCriteriaListForInquiryIdTypeStructuredQuery(
+      int inquiryId) {
+    List<InquiryCriteria> inquiryCriteria = fetchInquiryCriteriaForInquiryId(inquiryId);
+
+    Optional<InquiryCriteria> inquiryCriteriaOptional =
+        inquiryCriteria.stream()
+            .filter(inquiryCriteriaTemp -> inquiryCriteriaTemp.getType()
+                == InquiryCriteriaType.IC_STRUCTURED_QUERY)
+            .findFirst();
+
+    return inquiryCriteriaOptional.isPresent() ? inquiryCriteriaOptional.get().getCriteria() : "";
+  }
+
+  /**
    * Update the inquiry criteria.
    * @param inquiryCriteria the updated inquiry criteria
    */

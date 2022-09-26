@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 public class Proxy {
 
   private static final Logger logger = LogManager.getLogger(Proxy.class);
+
   private static final String COMMON_CONFIG_FILENAME_SUFFIX = "_common_config.xml";
 
   /**

@@ -1,7 +1,8 @@
 package de.samply.share.broker.control;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import de.samply.share.broker.model.DefaultInquiryCriteriaTranslatable;
+import de.samply.share.broker.model.InquiryCriteriaTranslatable;
 import de.samply.share.broker.model.db.tables.pojos.BankSite;
 import de.samply.share.broker.model.db.tables.pojos.Inquiry;
 import de.samply.share.broker.model.db.tables.pojos.InquirySite;
@@ -33,26 +34,27 @@ import org.jooq.tools.json.JSONParser;
 import org.jooq.tools.json.ParseException;
 
 /**
- * holds methods and information necessary to create and display queries.
+ * Holds methods and information necessary to create and display queries.
  */
 public class SearchController {
 
+  private static final Logger logger = LogManager.getLogger(SearchController.class);
 
-  private static NTokenHandler N_TOKEN_HANDLER = new NTokenHandler();
-  private static Logger logger = LogManager.getLogger(SearchController.class);
+  private static final NTokenHandler N_TOKEN_HANDLER = new NTokenHandler();
 
   /**
-   * release query from Icinga for bridgeheads.
+   * Release query from Icinga for bridgeheads.
    *
-   * @param query the query
-   * @param sites the sites
+   * @param query     the query
+   * @param sites     the sites
+   * @param queryName query title name
+   * @return the Inquiry ID
    */
-  public static int releaseQuery(String query, List<String> sites) {
+  public static int releaseQuery(InquiryCriteriaTranslatable query, List<String> sites,
+      String queryName) {
     InquiryHandler inquiryHandler = new InquiryHandler();
-    int inquiryId = inquiryHandler
-        .storeAndRelease(query, 600, "Icinga test", "", -1, -1,
-            new ArrayList<>(),
-            true, true);
+    int inquiryId = inquiryHandler.storeAndRelease(query, 1, queryName, "", -1, -1,
+        new ArrayList<>(), true);
     List<String> siteIds = new ArrayList<>();
     if (sites.size() > 0) {
       for (String siteName : sites) {
@@ -80,8 +82,9 @@ public class SearchController {
 
     InquiryHandler inquiryHandler = new InquiryHandler();
     int inquiryId = inquiryHandler
-        .storeAndRelease(simpleQueryDtoJson, loggedUser.getId(), "", "", -1, -1, new ArrayList<>(),
-            true, false);
+        .storeAndRelease(new DefaultInquiryCriteriaTranslatable(simpleQueryDtoJson),
+            loggedUser.getId(), "", "", -1, -1, new ArrayList<>(),
+            true);
     if (inquiryId > 0 && !StringUtils.isBlank(ntoken)) {
       N_TOKEN_HANDLER.saveNToken(inquiryId, ntoken, simpleQueryDtoJson);
     }
@@ -129,6 +132,7 @@ public class SearchController {
 
   /**
    * Get the results for the monitoring.
+   *
    * @param inquiryId the id of the query
    * @return the results of the sites
    */

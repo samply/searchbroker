@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 public class MailUtils {
 
   private static final Logger logger = LogManager.getLogger(MailUtils.class);
+
   private static final String MAIL_SUBJECT_REGISTRATION_DE =
       "Ihre Registrierung am Samply.Share Suchbroker";
   private static final String MAIL_SUBJECT_REGISTRATION_EN =

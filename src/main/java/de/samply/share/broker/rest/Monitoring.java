@@ -1,11 +1,16 @@
 package de.samply.share.broker.rest;
 
+import static de.samply.share.broker.filter.BasicAuthRealm.ICINGA;
 import static de.samply.share.broker.rest.InquiryHandler.isQueryLanguageCql;
 import static de.samply.share.broker.rest.InquiryHandler.isQueryLanguageViewQuery;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 import com.google.gson.Gson;
 import de.samply.common.mdrclient.MdrClient;
 import de.samply.share.broker.control.SearchController;
+import de.samply.share.broker.filter.BasicAuthSecure;
+import de.samply.share.broker.model.CqlInquiryCriteriaTranslatable;
+import de.samply.share.broker.model.QueryContainer;
 import de.samply.share.broker.model.db.tables.pojos.Site;
 import de.samply.share.broker.monitoring.QueryObject;
 import de.samply.share.broker.utils.Utils;
@@ -24,10 +29,10 @@ import de.samply.share.model.common.ObjectFactory;
 import de.samply.share.model.common.Or;
 import de.samply.share.model.common.Query;
 import de.samply.share.model.common.Where;
+import de.samply.share.model.cql.CqlQuery;
 import de.samply.share.utils.QueryConverter;
 import de.samply.web.mdrfaces.MdrContext;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.ws.rs.Consumes;
@@ -59,7 +64,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 @Path("/monitoring")
 public class Monitoring {
 
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
+  private static final Logger logger = LogManager.getLogger(Monitoring.class);
 
   /**
    * Construct a reference query to use for the monitoring system.
@@ -74,11 +79,11 @@ public class Monitoring {
     Eq eq = new Eq();
     Attribute attribute = new Attribute();
 
-    if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("samply")) {
+    if (ProjectInfo.INSTANCE.getProjectName().equalsIgnoreCase("samply")) {
       attribute.setMdrKey("urn:mdr16:dataelement:23:1");
       attribute.setValue(objectFactory.createValue("female"));
 
-    } else if (ProjectInfo.INSTANCE.getProjectName().toLowerCase().equals("dktk")) {
+    } else if (ProjectInfo.INSTANCE.getProjectName().equalsIgnoreCase("dktk")) {
       // TNM-T = 2
       attribute.setMdrKey("urn:dktk:dataelement:100:*");
       attribute.setValue(objectFactory.createValue("2"));
@@ -96,8 +101,8 @@ public class Monitoring {
   }
 
   /**
-   * Respond to an active check from icinga.
-   * Check if the database is reachable Check if the MDR is reachable.
+   * Respond to an active check from icinga. Check if the database is reachable Check if the MDR is
+   * reachable.
    *
    * @return health status for icinga to display
    */
@@ -141,8 +146,8 @@ public class Monitoring {
    * @param authorizationHeader the api key
    * @param statusReport        the list of items to report to icinga
    * @return <CODE>200</CODE> on success
-   *        <CODE>401</CODE> if no bank was found to the api key
-   *        <CODE>500</CODE> on any other error
+   * <CODE>401</CODE> if no bank was found to the api key
+   * <CODE>500</CODE> on any other error
    */
   @PUT
   @Consumes(MediaType.APPLICATION_JSON)
@@ -160,14 +165,14 @@ public class Monitoring {
 
     if (site == null) {
       logger.warn("Site not found for status report. Bank ID " + bankId);
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+      return Response.status(INTERNAL_SERVER_ERROR).build();
     }
 
     try {
       IcingaConnector.reportStatusItems(site.getName(), statusReport);
       return Response.ok().build();
     } catch (IcingaConnectorException e) {
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
   }
 
@@ -193,16 +198,18 @@ public class Monitoring {
       }
       return Response.ok(queryString).build();
     } catch (JAXBException e) {
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
 
   }
 
   /**
    * Create a new monitoring query.
+   *
    * @param queryObject the query as cql string and the target sites as list
    * @return response if the query has been created
    */
+  @BasicAuthSecure(ICINGA)
   @Path("queries")
   @POST
   @Produces(MediaType.TEXT_PLAIN)
@@ -224,37 +231,72 @@ public class Monitoring {
           schema = @Schema(implementation = QueryObject.class))
           QueryObject queryObject) {
     try {
-      if (auth == null || !checkBasicAuth(auth)) {
-        return Response.status(Response.Status.UNAUTHORIZED).build();
-      }
-      return Response.ok(
-          SearchController.releaseQuery(new Gson().toJson(queryObject.getCqlQueryList()),
-              queryObject.getTarget())).build();
+      return Response.ok(SearchController.releaseQuery(
+          new CqlInquiryCriteriaTranslatable(queryObject.getCqlQueryList().getQueries()),
+          queryObject.getTarget(), "Monitoring"
+      )).build();
     } catch (Exception e) {
       logger.error(e);
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+    }
+  }
+
+  /**
+   * Create a new monitoring query.
+   *
+   * @param queryContainer the query as cql string and the target sites as list
+   * @return response if the query has been created
+   */
+  @BasicAuthSecure(ICINGA)
+  @Path("/v2/queries")
+  @POST
+  @Produces(MediaType.TEXT_PLAIN)
+  @Consumes({MediaType.APPLICATION_JSON})
+  @APIResponses({
+      @APIResponse(
+          responseCode = "200",
+          description = "ok",
+          content = @Content(
+              mediaType = MediaType.APPLICATION_JSON,
+              schema = @Schema(implementation = String.class))),
+      @APIResponse(responseCode = "500", description = "Internal Server Error")
+  })
+  @Operation(summary = "Save query in searchbroker database for monitoring")
+  public Response createQuery(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
+      @Parameter(
+          name = "query",
+          description = "Query as a JSON object",
+          schema = @Schema(implementation = QueryContainer.class))
+          QueryContainer<CqlQuery[]> queryContainer) {
+    try {
+      return Response.ok(SearchController.releaseQuery(
+          new CqlInquiryCriteriaTranslatable(Arrays.asList(queryContainer.getQuery())),
+          queryContainer.getTarget(), queryContainer.getQueryName()
+      )).build();
+    } catch (Exception e) {
+      logger.error(e);
+      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
   }
 
   /**
    * Get the results for a monitoring query.
-   * @param auth basic auth
+   *
+   * @param auth    basic auth
    * @param queryId the query id
    * @return the results of the sites
    */
+  @BasicAuthSecure(ICINGA)
   @Path("queries/{id}")
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getResult(@HeaderParam(HttpHeaders.AUTHORIZATION) String auth,
       @PathParam("id") int queryId) {
     try {
-      if (auth == null || !checkBasicAuth(auth)) {
-        return Response.status(Response.Status.UNAUTHORIZED).build();
-      }
       return Response.ok(SearchController.getResultFromQuery(queryId)).build();
     } catch (Exception e) {
       logger.error(e);
-      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+      return Response.status(INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
   }
 
@@ -278,16 +320,6 @@ public class Monitoring {
     public void setStatus(String status) {
       this.status = status;
     }
-  }
-
-  private boolean checkBasicAuth(String basicAuth) {
-    String username = ProjectInfo.INSTANCE.getConfig().getProperty("icinga.username");
-    String password = ProjectInfo.INSTANCE.getConfig().getProperty("icinga.password");
-    String base64Credentials = basicAuth.substring("Basic".length()).trim();
-    byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
-    String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-    final String[] values = credentials.split(":", 2);
-    return values[0].equals(username) && values[1].equals(password);
   }
 
 }

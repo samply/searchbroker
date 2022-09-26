@@ -28,10 +28,11 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/documentUpload")
 public class FileuploadHandler {
 
+  private static final Logger logger = LogManager.getLogger(FileuploadHandler.class);
+
   private static final String DOC_TYPE = "documentType";
   private static final String DOC_ID = "documentId";
   private static final String ERROR = "error";
-  private Logger logger = LogManager.getLogger(this.getClass().getName());
 
   /**
    * Accept a file upload from the webinterface.

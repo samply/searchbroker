@@ -25,7 +25,8 @@ import org.togglz.core.user.UserProvider;
 public class ClientConfiguration implements TogglzConfig, FeatureManagerProvider {
 
   private static final Logger logger = LogManager.getLogger(ClientConfiguration.class);
-  private static final String featureProperties = "features.properties";
+
+  private static final String FEATURES_PROPERTIES = "features.properties";
 
   private FeatureManager featureManager;
 
@@ -55,7 +56,7 @@ public class ClientConfiguration implements TogglzConfig, FeatureManagerProvider
     File file;
     try {
       file = FileFinderUtil
-          .findFile(featureProperties, ProjectInfo.INSTANCE.getProjectName().toLowerCase(),
+          .findFile(FEATURES_PROPERTIES, ProjectInfo.INSTANCE.getProjectName().toLowerCase(),
               System.getProperty("catalina.base") + File.separator + "conf",
               getServletContext().getRealPath("/WEB-INF"));
     } catch (FileNotFoundException e) {
