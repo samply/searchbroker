@@ -402,7 +402,7 @@
     <poi-ooxml.version>3.17</poi-ooxml.version>
     <easymock.version>4.0.2</easymock.version>
     <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
-    <version.jersey>2.31</version.jersey>
+    <version.jersey>3.0.8</version.jersey>
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
     <junit-platform-launcher.version>1.8.2</junit-platform-launcher.version>
     <togglz-core.version>2.6.1.Final</togglz-core.version>
