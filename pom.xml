@@ -399,7 +399,7 @@
     <quartz.version>2.3.2</quartz.version>
     <guava.version>24.0-jre</guava.version>
     <swagger-ui.version>3.25.0</swagger-ui.version>
-    <poi-ooxml.version>3.17</poi-ooxml.version>
+    <poi-ooxml.version>5.2.3</poi-ooxml.version>
     <easymock.version>4.0.2</easymock.version>
     <java-hamcrest.version>2.0.0.0</java-hamcrest.version>
     <version.jersey>2.31</version.jersey>
