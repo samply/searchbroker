@@ -1,4 +1,4 @@
-FROM tomcat:8.5.32-jre8-alpine
+FROM tomcat:8-jre8
 
 RUN ["rm", "-fr", "/usr/local/tomcat/webapps"]
 ADD target/searchbroker.war                     /usr/local/tomcat/webapps/broker.war
@@ -23,7 +23,9 @@ RUN chmod +x                                    /samply/start.sh
 
 RUN chown -R 1001:1001 /samply/ /usr/local/tomcat/
 
-RUN apk add --no-cache ttf-dejavu \
-    && rm -rf /var/cache/apk/*
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y fonts-dejavu && \
+    apt-get autoremove -y && apt-get clean \
+
 USER 1001
 CMD ["/samply/start.sh"]
