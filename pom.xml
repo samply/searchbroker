@@ -372,7 +372,7 @@
          in the search_query.xhtml is not working, otherwise. -->
     <version.mojarra>2.2.13</version.mojarra>
 
-    <version.flyway>4.2.0</version.flyway>
+    <version.flyway>9.3.1</version.flyway>
     <version.jooq>3.12.4</version.jooq>
     <el-impl.version>2.2</el-impl.version>
     <jstl.version>1.2</jstl.version>
