@@ -1,4 +1,4 @@
-FROM tomcat:8-jre8
+FROM tomcat:8-jre8-temurin-focal
 
 RUN ["rm", "-fr", "/usr/local/tomcat/webapps"]
 ADD target/searchbroker.war                     /usr/local/tomcat/webapps/broker.war
