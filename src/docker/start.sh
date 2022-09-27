@@ -40,7 +40,5 @@ sed -i "s/{FEATURE_CREATE_NEW_SITE}/${FEATURE_CREATE_NEW_SITE:-false}/" "$file"
 
 sed -i "s/{level}/${LOG_LEVEL:-info}/"                  /usr/local/tomcat/conf/log4j2.xml
 
-export CATALINA_OPTS="${CATALINA_OPTS} -javaagent:/samply/jmx_prometheus_javaagent-0.3.1.jar=9100:/samply/jmx-exporter.yml"
-
 # Replace start.sh with catalina.sh
 exec /usr/local/tomcat/bin/catalina.sh run
