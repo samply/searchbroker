@@ -362,7 +362,7 @@
     <!-- Samply dependencies -->
     <version.samply.common.config>5.2.0</version.samply.common.config>
     <common-mailing.version>3.0.0</common-mailing.version>
-    <common-http.version>7.3.0</common-http.version>
+    <common-http.version>7.4.4</common-http.version>
     <jsf-renderer.version>2.0.0</jsf-renderer.version>
     <share-common.version>4.5.0</share-common.version>
     <share-dto.version>5.3.0</share-dto.version>
