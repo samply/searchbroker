@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.5.2 - 2022-11-17]
+
+### Security
+
+* [Fix ICD-10-GM URL](https://github.com/samply/searchbroker/pull/102)
+
 ## [8.5.1 - 2022-09-27]
 
 ### Security
