@@ -301,12 +301,17 @@ public class Monitoring {
   }
 
   private String createReferenceQueryCql() {
+    // Gender and AgeClass are necessary because the Measure Resource references that Expressions
     return "library Retrieve\n"
-        + "using FHIR version '4.0.0'\n"
-        + "include FHIRHelpers version '4.0.0'\n"
-        + "context Patient\n"
-        + "define InInitialPopulation:\n"
-        + "    Patient.gender = 'female'";
+           + "using FHIR version '4.0.0'\n"
+           + "include FHIRHelpers version '4.0.0'\n"
+           + "context Patient\n"
+           + "define InInitialPopulation:\n"
+           + "    Patient.gender = 'female'\n"
+           + "define Gender:\n"
+           + "    null\n"
+           + "define AgeClass:\n"
+           + "    null\n";
   }
 
   static class Status {
