@@ -380,7 +380,7 @@
     <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
     <omnifaces.version>1.14.1</omnifaces.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-fileupload.version>1.4</commons-fileupload.version>
+    <commons-fileupload.version>1.5</commons-fileupload.version>
     <jcifs.version>1.3.17</jcifs.version>
     <jackson-core-asl.version>1.9.13</jackson-core-asl.version>
     <commons-io.version>2.11.0</commons-io.version>
